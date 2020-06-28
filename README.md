@@ -65,29 +65,6 @@ The application should be accessible at `http://0.0.0.0:3000`
 
 Try to reach baceknd API at `http://0.0.0.0:3000/api/users/`
 
-## Typescript in Vue components
-
-### components/User.vue
-
-This is a `Vue.extend({})` syntax and in my opinion provides a bit better Typescript safety-net.
-
-It also comes from the well-known Options API.
-
-### components/User2.vue
-
-This is a class-based component with annotations and native getter class methods.
-
-However, the big limitation is that when declaring a class variable for mutating state (OptionAPI `data() { ... }`), you always have to initialize it with some value. You cannot leave it uninitialized and also you can't assign `undefined` as initialization value, because it will NOT be reactive (Vue will not work as expected).
-
-Also, if you want to initialize your state based on props, you have to use the `data() { ... }` function anyway.
-
-## How Typescript is compiled and how app is served in production
-
-To understand how things work in production, we have to look at two components of the app:
-
-- NuxtJS part
-- ExpressJS backend API
-
 ### NuxtJS
 
 NuxtJS is compiled into `.nuxt/dist/` directory which contains `client/` and `server/` directory.
