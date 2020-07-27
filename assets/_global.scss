@@ -1,0 +1,188 @@
+/* Spacing: 50, 30, 20, 15, 10, 5, 2.5 */
+$spacing-sides: (
+  top: t,
+  bottom: b,
+  left: l,
+  right: r,
+);
+$spacing-sizes: (
+  0: '2px',
+  1: '4px',
+  2: '8px',
+  3: '16px',
+  4: '24px',
+  5: '32px',
+  6: '64px',
+  20: '20px',
+  30: '30px',
+  40: '40px',
+  50: '50px',
+  60: '60px',
+  70: '70px',
+  80: '80px',
+  100: '100px',
+  150: '150px',
+);
+
+/* Margin: generate my-[0,6] */
+@each $szlabel, $szval in $spacing-sizes {
+  .my-#{$szlabel} {
+    margin-top: #{$szval} !important;
+    margin-bottom: #{$szval} !important;
+  }
+
+  .mx-#{$szlabel} {
+    margin-left: #{$szval} !important;
+    margin-right: #{$szval} !important;
+  }
+}
+/* Margin: generate m[l,r,t,b]-[0,6] */
+@each $side, $sidelabel in $spacing-sides {
+  @each $szlabel, $szval in $spacing-sizes {
+    .m#{$sidelabel}-#{$szlabel} {
+      margin-#{$side}: #{$szval} !important;
+    }
+  }
+}
+.ml-auto {
+  margin-left: auto !important;
+}
+.mr-auto {
+  margin-right: auto !important;
+}
+
+/* Padding: generate py-[0,6] */
+@each $szlabel, $szval in $spacing-sizes {
+  .py-#{$szlabel} {
+    padding-top: #{$szval} !important;
+    padding-bottom: #{$szval} !important;
+  }
+
+  .px-#{$szlabel} {
+    padding-left: #{$szval} !important;
+    padding-right: #{$szval} !important;
+  }
+}
+/* Padding: generate p[l,r,t,b]-[0,6] */
+@each $side, $sidelabel in $spacing-sides {
+  @each $szlabel, $szval in $spacing-sizes {
+    .p#{$sidelabel}-#{$szlabel} {
+      padding-#{$side}: #{$szval} !important;
+    }
+  }
+}
+
+// Flex layout
+
+/* Modifiers: Display behavior */
+.m--flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &.column {
+    flex-direction: column;
+  }
+
+  &.align-start {
+    align-items: flex-start;
+  }
+
+  &.align-end {
+    align-items: flex-end;
+  }
+
+  &.justify-center {
+    justify-content: center;
+  }
+
+  &.justify-end {
+    justify-content: flex-end;
+  }
+
+  &.columns-two {
+    & > * {
+      flex-basis: 50%;
+    }
+  }
+}
+
+/* Text Alignment */
+.text--align-center {
+  text-align: center;
+}
+.text--align-left {
+  text-align: left;
+}
+.text--align-right {
+  text-align: right;
+}
+
+// Chart
+.c-chart {
+  &__title {
+    font-family: 'Source Sans Pro';
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 35px;
+    color: $color-blue-100;
+  }
+
+  &__subtitle {
+    font-family: 'Source Sans Pro';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 23px;
+    color: $color-blue-100;
+  }
+
+  &__last-update {
+    font-family: 'Source Sans Pro';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 23px;
+    color: $color-gray-600;
+  }
+
+  &__signal {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 30px;
+    color: $color-blue-100;
+  }
+
+  &__signal-value {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 25px;
+    color: $color-blue-100;
+  }
+
+  &__data-switches {
+    display: flex;
+    flex-direction: row;
+    max-width: 50%;
+    flex-wrap: wrap;
+
+    & > * {
+      margin-right: 10px;
+      margin-bottom: 4px;
+    }
+  }
+
+  &__hint {
+    background-color: #e6eaed;
+    padding: 20px 35px;
+    font-size: 16px;
+    line-height: 20px;
+    color: $color-blue-100;
+  }
+
+  &__brief,
+  &__resources {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 30px;
+    color: $color-blue-100;
+  }
+}
