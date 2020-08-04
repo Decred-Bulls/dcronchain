@@ -62,6 +62,15 @@
       <strong>undervalued</strong> compare with the Realised value.
     </div>
 
+    <div class="my-4">
+      <Plotly
+        v-if="isClientSide"
+        :data="chartData.data"
+        :layout="chartData.layout"
+        :display-mode-bar="false"
+      ></Plotly>
+    </div>
+
     <div class="m--flex columns-two mt-40">
       <div>
         <h2 class="c-chart__brief">Chart Brief</h2>
@@ -95,12 +104,15 @@ import Button from '@/components/Button/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
 import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
+import JsonChartData from './mayer_multiple_light.json'
 
 export default Vue.extend({
   layout: 'chart',
 
   components: {
     Button,
+    // import { Plotly } from 'vue-plotly'
+    Plotly: () => import('vue-plotly').then(mod => mod.Plotly),
     SignalIcon,
     Tag,
     Toggle,
@@ -115,7 +127,15 @@ export default Vue.extend({
       showSell: true,
       showBuy: true,
       showStrongBuy: true,
+      chartData: JsonChartData,
     }
+  },
+
+  computed: {
+    isClientSide(): boolean {
+      // @ts-ignore
+      return !!global.document && !!global.window
+    },
   },
 })
 </script>

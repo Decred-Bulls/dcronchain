@@ -10,9 +10,11 @@
       'color--green': color === 'green',
     }"
   >
-    <el-switch :value="value" @change="enabled => onChange(enabled)">
-    </el-switch>
-    <label><slot></slot> </label>
+    <el-switch :value="value" @change="enabled => onChange(enabled)" />
+    <label>
+      <!--  -->
+      <slot></slot>
+    </label>
   </div>
 </template>
 
@@ -44,6 +46,7 @@ export default Vue.extend({
 
   methods: {
     onChange(enabled: boolean) {
+      this.$emit('input', enabled)
       this.$emit('change', enabled)
     },
   },
