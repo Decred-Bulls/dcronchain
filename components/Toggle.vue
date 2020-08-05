@@ -10,7 +10,7 @@
       'color--green': color === 'green',
     }"
   >
-    <el-switch :value="value" @change="enabled => onChange(enabled)" />
+    <el-switch :value="value" @input="value = $event" />
     <label>
       <!--  -->
       <slot></slot>
