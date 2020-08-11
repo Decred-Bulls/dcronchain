@@ -71,5 +71,10 @@ export default Vue.extend({
     color: #fff;
     background-color: $color-blue-100;
   }
+
+  svg {
+    width: 1em;
+    height: auto;
+  }
 }
 </style>
