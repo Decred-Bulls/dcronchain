@@ -66,7 +66,7 @@
       <client-only>
         <Plotly
           :data="adjustedJsonData.data"
-          :layout="adjustedJsonData.layout"
+          :layout="chartLayout"
           :options="adjustedJsonData.options"
         ></Plotly>
       </client-only>
@@ -195,6 +195,12 @@ export default Vue.extend({
       return {
         ...this.chartData,
         data: this.chartData.data.filter((d) => d.show === true),
+      }
+    },
+    chartLayout(): any {
+      return {
+        ...this.chartData.layout,
+        height: 600,
       }
     },
     toggles(): any {
