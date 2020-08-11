@@ -10,7 +10,7 @@
       'color--green': color === 'green',
     }"
   >
-    <el-switch :value="value" @input="value = $event" />
+    <el-switch v-bind="$attrs" v-on="$listeners" />
     <label>
       <!--  -->
       <slot></slot>
@@ -31,12 +31,8 @@ type TypeColor =
   | 'green'
 
 export default Vue.extend({
+  inheritAttrs: false,
   props: {
-    value: {
-      type: Boolean,
-      required: true,
-      default: () => false,
-    } as PropOptions<Boolean>,
     color: {
       type: String,
       required: false,
