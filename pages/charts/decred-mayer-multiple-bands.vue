@@ -38,15 +38,15 @@
       <!-- Switches -->
       <div class="m--flex mt-40">
         <div class="c-chart__data-switches">
-          <Toggle v-model="showUSDPrice"> DCR Price (USD) </Toggle>
-          <Toggle v-model="showMayerMultiple" color="purple">
-            Show Mayer Multiple
+          <Toggle
+            v-for="t in toggles"
+            :key="t.key"
+            :active-color="t.colorHex"
+            :value="showChartSeriesMap[t.key]"
+            @input="(value) => onChangeChartSeriesMap(t.key, value)"
+          >
+            {{ t.name }}
           </Toggle>
-          <Toggle v-model="show200DMA" color="blue"> 200DMA </Toggle>
-          <Toggle v-model="showStrongSell" color="red"> Strong Sell </Toggle>
-          <Toggle v-model="showSell" color="pink"> Sell </Toggle>
-          <Toggle v-model="showBuy" color="neon-green"> Buy </Toggle>
-          <Toggle v-model="showStrongSell" color="green"> Strong Buy </Toggle>
         </div>
         <div class="m--flex justify-end" style="flex-grow: 1;">
           <Button inverted>USD</Button>
@@ -63,36 +63,40 @@
     </div>
 
     <div class="my-4">
-      <Plotly
-        v-if="isClientSide"
-        :data="chartData.data"
-        :layout="chartData.layout"
-        :display-mode-bar="false"
-      ></Plotly>
+      <client-only>
+        <Plotly
+          :data="adjustedJsonData.data"
+          :layout="adjustedJsonData.layout"
+          :options="adjustedJsonData.options"
+        ></Plotly>
+      </client-only>
     </div>
 
-    <div class="m--flex columns-two mt-40">
+    <div class="m--flex columns-two align-start mt-40">
       <div>
         <h2 class="c-chart__brief">Chart Brief</h2>
         <p>
           The Mayer Multiple is a simple oscillator calculated by taking the
-          ratio of the DCR/USD Price to the 200-day moving average. This metric
-          provides a measure of deviation of price from a long term mean which
-          is commonly utilised in technical analysis as a bull/bear
-          support/resistance level.
+          ratio of the current DCR/USD Price to its 200-day moving average. The
+          200-day moving average is a very common indicator in technical
+          analysis and is often used to calibrate macro bull/bear bias. The
+          Mayer Multiple is a metric that presents the deviation of price from
+          this long term mean as an oscillator with historically relevant
+          probabilities of occurence shown as follows:
         </p>
       </div>
       <div>
         <h2 class="c-chart__resources">Chart Resources</h2>
         <p>
-          Link name
+          The Mayer Multiple -
+          <a
+            href="https://www.theinvestorspodcast.com/bitcoin-mayer-multiple/"
+            target="_blank"
+          >
+            https://www.theinvestorspodcast.com/bitcoin-mayer-multiple/
+          </a>
         </p>
-        <p>
-          Link name
-        </p>
-        <p>
-          Link name
-        </p>
+        <p></p>
       </div>
     </div>
   </div>
@@ -104,7 +108,48 @@ import Button from '@/components/Button/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
 import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
-import JsonChartData from './mayer_multiple_light.json'
+import JsonChartData from './mayermultiple_pricing_usd_light.js'
+import { Plotly } from 'vue-plotly'
+
+function rgbToHex(r: string | number, g: string | number, b: string | number) {
+  return (
+    '#' +
+    ((1 << 24) + (Number(r) << 16) + (Number(g) << 8) + Number(b))
+      .toString(16)
+      .slice(1)
+  )
+}
+
+function normalize(value: string) {
+  return value.replace(' ', '-').replace('(', '').replace(')', '').toLowerCase()
+}
+
+function createKey(name: string, idx: string | number) {
+  return `${idx}-${normalize(name)}`
+}
+
+type ChartSeries = {
+  fill: string
+  fillcolor: string
+  line: { color: string; dash: string; width: number }
+  name: string
+  opacity: number
+  showlegend: boolean
+  type: string
+  x: string[]
+  xaxis: string
+  y: (number | null)[]
+  yaxis: string
+  // Custom fields
+  key?: string
+  show?: boolean
+  showToggle?: boolean
+}
+
+type Chart = {
+  data: ChartSeries[]
+  layout: any
+}
 
 export default Vue.extend({
   layout: 'chart',
@@ -112,7 +157,8 @@ export default Vue.extend({
   components: {
     Button,
     // import { Plotly } from 'vue-plotly'
-    Plotly: () => import('vue-plotly').then(mod => mod.Plotly),
+    // Plotly: () => import('vue-plotly').then((mod) => mod.Plotly),
+    Plotly,
     SignalIcon,
     Tag,
     Toggle,
@@ -120,21 +166,73 @@ export default Vue.extend({
 
   data() {
     return {
-      showUSDPrice: false,
-      showMayerMultiple: true,
-      show200DMA: true,
-      showStrongSell: true,
-      showSell: true,
-      showBuy: true,
-      showStrongBuy: true,
-      chartData: JsonChartData,
+      showChartSeriesMap: {
+        //
+      } as any,
+      chartData: JsonChartData as Chart,
     }
   },
 
+  mounted() {
+    this.chartData.data.forEach((d, idx) => {
+      const key = createKey(d.name, idx)
+      this.showChartSeriesMap[key] = true
+    })
+
+    this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
+      return {
+        ...d,
+        key: createKey(d.name, idx),
+        show: true,
+        showToggle: d.showlegend,
+        showlegend: false,
+      }
+    })
+  },
+
   computed: {
-    isClientSide(): boolean {
-      // @ts-ignore
-      return !!global.document && !!global.window
+    adjustedJsonData(): any {
+      return {
+        ...this.chartData,
+        data: this.chartData.data.filter((d) => d.show === true),
+      }
+    },
+    toggles(): any {
+      return this.chartData.data
+        .filter((d) => d.showToggle === true)
+        .map((d, idx) => {
+          // Parse RGB string
+          const rgb = d.line.color.match(/rgb\((\d+),(\d+),(\d+)\)/i) as any
+          // console.log({ rgb })
+          return {
+            name: d.name,
+            key: createKey(d.name, idx),
+            colorRgb: d.line.color,
+            colorHex: rgb ? rgbToHex(rgb[1], rgb[2], rgb[3]) : undefined,
+          }
+        })
+    },
+  },
+
+  methods: {
+    onChangeChartSeriesMap(key: string, value: boolean) {
+      this.showChartSeriesMap = {
+        ...this.showChartSeriesMap,
+        [key]: value,
+      }
+
+      this.chartData = {
+        ...this.chartData,
+        data: this.chartData.data.map((d) => {
+          if (d.key === key) {
+            return {
+              ...d,
+              show: value,
+            }
+          }
+          return d
+        }),
+      }
     },
   },
 })
