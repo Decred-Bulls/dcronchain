@@ -1,5 +1,6 @@
 module.exports = {
-  mode: 'universal',
+  mode: 'spa',
+  telemetry: false,
   /*
    ** Headers of the page
    */
@@ -64,7 +65,7 @@ module.exports = {
       // https://vue-svg-loader.js.org/
 
       // Replace all existing rules which include SVG files
-      const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
+      const svgRule = config.module.rules.find((rule) => rule.test.test('.svg'))
       svgRule.test = /\.(png|jpe?g|gif|webp)$/
 
       // Create new rule for SVG loading
