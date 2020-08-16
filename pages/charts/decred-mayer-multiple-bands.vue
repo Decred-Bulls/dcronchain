@@ -37,17 +37,11 @@
 
       <!-- Switches -->
       <div class="m--flex mt-40">
-        <div class="c-chart__data-switches">
-          <Toggle
-            v-for="t in toggles"
-            :key="t.key"
-            :active-color="t.colorHex"
-            :value="showChartSeriesMap[t.key]"
-            @input="(value) => onChangeChartSeriesMap(t.key, value)"
-          >
-            {{ t.name }}
-          </Toggle>
-        </div>
+        <ChartToggles
+          :chartData="chartData"
+          class="c-chart__data-switches"
+          @change="onChangeChartData"
+        />
         <div class="m--flex justify-end" style="flex-grow: 1;">
           <Button inverted>USD</Button>
           <Button>BTC</Button>
@@ -72,7 +66,7 @@
       </client-only>
     </div>
 
-    <div class="m--flex columns-two align-start mt-40">
+    <div class="m--flex columns-two align-start mt-40 mb-150">
       <div>
         <h2 class="c-chart__brief">Chart Brief</h2>
         <p>
@@ -105,6 +99,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Button from '@/components/Button/index.vue'
+import ChartToggles from '@/components/ChartToggles/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
 import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
@@ -128,34 +123,12 @@ function createKey(name: string, idx: string | number) {
   return `${idx}-${normalize(name)}`
 }
 
-type ChartSeries = {
-  fill: string
-  fillcolor: string
-  line: { color: string; dash: string; width: number }
-  name: string
-  opacity: number
-  showlegend: boolean
-  type: string
-  x: string[]
-  xaxis: string
-  y: (number | null)[]
-  yaxis: string
-  // Custom fields
-  key?: string
-  show?: boolean
-  showToggle?: boolean
-}
-
-type Chart = {
-  data: ChartSeries[]
-  layout: any
-}
-
 export default Vue.extend({
   layout: 'chart',
 
   components: {
     Button,
+    ChartToggles,
     // import { Plotly } from 'vue-plotly'
     // Plotly: () => import('vue-plotly').then((mod) => mod.Plotly),
     Plotly,
@@ -174,11 +147,6 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.chartData.data.forEach((d, idx) => {
-      const key = createKey(d.name, idx)
-      this.showChartSeriesMap[key] = true
-    })
-
     this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
       return {
         ...d,
@@ -203,42 +171,11 @@ export default Vue.extend({
         height: 600,
       }
     },
-    toggles(): any {
-      return this.chartData.data
-        .filter((d) => d.showToggle === true)
-        .map((d, idx) => {
-          // Parse RGB string
-          const rgb = d.line.color.match(/rgb\((\d+),(\d+),(\d+)\)/i) as any
-          // console.log({ rgb })
-          return {
-            name: d.name,
-            key: createKey(d.name, idx),
-            colorRgb: d.line.color,
-            colorHex: rgb ? rgbToHex(rgb[1], rgb[2], rgb[3]) : undefined,
-          }
-        })
-    },
   },
 
   methods: {
-    onChangeChartSeriesMap(key: string, value: boolean) {
-      this.showChartSeriesMap = {
-        ...this.showChartSeriesMap,
-        [key]: value,
-      }
-
-      this.chartData = {
-        ...this.chartData,
-        data: this.chartData.data.map((d) => {
-          if (d.key === key) {
-            return {
-              ...d,
-              show: value,
-            }
-          }
-          return d
-        }),
-      }
+    onChangeChartData(newChartData: Chart) {
+      this.chartData = newChartData
     },
   },
 })
