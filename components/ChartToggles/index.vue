@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import Toggle from '@/components/Toggle.vue'
-import { rgbToHex, normalize, createKey } from './utils'
+import { rgbToHex, normalize, createKey } from '@/utils'
 
 export default Vue.extend({
   components: {
@@ -24,8 +24,9 @@ export default Vue.extend({
 
   props: {
     chartData: {
-      type: Object,
-      required: true,
+      type: [Object],
+      required: false,
+      default: () => null,
     } as PropOptions<Chart>,
   },
 
@@ -38,14 +39,21 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.chartData.data.forEach((d, idx) => {
-      const key = createKey(d.name, idx)
-      this.showChartSeriesMap[key] = true
-    })
+    this.initChartSeriesMap()
+  },
+
+  watch: {
+    chartData() {
+      this.initChartSeriesMap()
+    },
   },
 
   computed: {
     toggles(): any {
+      if (!this.chartData) {
+        return []
+      }
+
       return this.chartData.data
         .filter((d) => d.showToggle === true)
         .map((d, idx) => {
@@ -63,6 +71,14 @@ export default Vue.extend({
   },
 
   methods: {
+    initChartSeriesMap() {
+      if (this.chartData && Object.keys(this.showChartSeriesMap).length === 0) {
+        this.chartData.data.forEach((d, idx) => {
+          const key = createKey(d.name, idx)
+          this.showChartSeriesMap[key] = true
+        })
+      }
+    },
     onChangeChartSeriesMap(key: string, value: boolean) {
       this.showChartSeriesMap = {
         ...this.showChartSeriesMap,

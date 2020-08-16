@@ -17,10 +17,11 @@
             Decred Mayer Multiple Bands
           </h1>
           <div class="c-chart__subtitle">
-            July, 1 2020 - Mayer Multiple = 0.9 / DCR Price = $100
+            {{ lastUpdate | formatDate }} - Mayer Multiple = 0.9 / DCR Price =
+            $100
           </div>
           <div class="c-chart__last-update">
-            Updated 03 July 2020
+            Updated {{ lastUpdate | formatDate }}
           </div>
         </div>
 
@@ -98,30 +99,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { normalize, createKey } from '@/utils'
 import Button from '@/components/Button/index.vue'
 import ChartToggles from '@/components/ChartToggles/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
 import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
-import JsonChartData from './mayermultiple_pricing_usd_light.js'
 import { Plotly } from 'vue-plotly'
-
-function rgbToHex(r: string | number, g: string | number, b: string | number) {
-  return (
-    '#' +
-    ((1 << 24) + (Number(r) << 16) + (Number(g) << 8) + Number(b))
-      .toString(16)
-      .slice(1)
-  )
-}
-
-function normalize(value: string) {
-  return value.replace(' ', '-').replace('(', '').replace(')', '').toLowerCase()
-}
-
-function createKey(name: string, idx: string | number) {
-  return `${idx}-${normalize(name)}`
-}
 
 export default Vue.extend({
   layout: 'chart',
@@ -142,34 +126,58 @@ export default Vue.extend({
       showChartSeriesMap: {
         //
       } as any,
-      chartData: JsonChartData as Chart,
+      chartData: null as Chart | null,
+      // chartData: {
+      //   data: [],
+      //   layout: {},
+      // } as Chart,
     }
   },
 
-  mounted() {
-    this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
-      return {
-        ...d,
-        key: createKey(d.name, idx),
-        show: true,
-        showToggle: d.showlegend,
-        showlegend: false,
-      }
-    })
+  async mounted() {
+    const response = await fetch(
+      'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
+    )
+    this.chartData = await response.json()
+
+    if (this.chartData) {
+      this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
+        return {
+          ...d,
+          key: createKey(d.name, idx),
+          show: true,
+          showToggle: d.showlegend,
+          showlegend: false,
+        }
+      })
+    }
   },
 
   computed: {
     adjustedJsonData(): any {
+      if (!this.chartData) {
+        return {}
+      }
+
       return {
-        ...this.chartData,
-        data: this.chartData.data.filter((d) => d.show === true),
+        ...((this.chartData as unknown) as Chart),
+        data: ((this.chartData as unknown) as Chart).data.filter(
+          (d) => d.show === true
+        ),
       }
     },
     chartLayout(): any {
+      if (!this.chartData) {
+        return {}
+      }
+
       return {
-        ...this.chartData.layout,
+        ...((this.chartData as unknown) as Chart).layout,
         height: 600,
       }
+    },
+    lastUpdate(): Date {
+      return new Date()
     },
   },
 
