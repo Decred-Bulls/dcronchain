@@ -123,14 +123,7 @@ export default Vue.extend({
 
   data() {
     return {
-      showChartSeriesMap: {
-        //
-      } as any,
       chartData: null as Chart | null,
-      // chartData: {
-      //   data: [],
-      //   layout: {},
-      // } as Chart,
     }
   },
 
