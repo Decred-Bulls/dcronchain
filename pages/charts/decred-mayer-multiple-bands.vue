@@ -68,8 +68,8 @@
     </div>
 
     <div class="m--flex columns-two align-start mt-40 mb-150">
-      <div>
-        <h2 class="c-chart__brief">Chart Brief</h2>
+      <div class="c-chart__brief">
+        <h2>Chart Brief</h2>
         <p>
           The Mayer Multiple is a simple oscillator calculated by taking the
           ratio of the current DCR/USD Price to its 200-day moving average. The
@@ -80,10 +80,11 @@
           probabilities of occurence shown as follows:
         </p>
       </div>
-      <div>
-        <h2 class="c-chart__resources">Chart Resources</h2>
+      <div class="c-chart__resources">
+        <h2>Chart Resources</h2>
         <p>
-          The Mayer Multiple -
+          The Mayer Multiple
+          <br />
           <a
             href="https://www.theinvestorspodcast.com/bitcoin-mayer-multiple/"
             target="_blank"
@@ -99,7 +100,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { normalize, createKey } from '@/utils'
+import { createKey } from '@/utils'
 import Button from '@/components/Button/index.vue'
 import ChartToggles from '@/components/ChartToggles/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
