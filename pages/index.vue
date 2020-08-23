@@ -24,6 +24,11 @@
           >Market-Realised Gradient Oscillator</nuxt-link
         >
       </li>
+      <li>
+        <nuxt-link to="/charts/decred-unrealised-profit-and-loss"
+          >Unrealised Profit and Loss</nuxt-link
+        >
+      </li>
     </ul>
   </div>
 </template>
