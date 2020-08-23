@@ -12,6 +12,18 @@
           >Realised cap and MVRV ratio</nuxt-link
         >
       </li>
+
+      <li>
+        <nuxt-link
+          to="/charts/decred-relative-bitcoin-realised-cap-and-mvrv-ratio"
+          >Decred Relative BTC Realised Cap and MVRV ratio</nuxt-link
+        >
+      </li>
+      <li>
+        <nuxt-link to="/charts/decred-market-realised-gradient-oscillator"
+          >Market-Realised Gradient Oscillator</nuxt-link
+        >
+      </li>
     </ul>
   </div>
 </template>
@@ -26,7 +38,9 @@ export default Vue.extend({
   },
 
   data() {
-    //
+    return {
+      //
+    }
   },
 
   computed: {

@@ -7,14 +7,16 @@
 
     <div class="mx-40 mt-50">
       <div class="">
-        <Tag color="green">Novice Friendly</Tag>
-        <Tag color="gray">Stakeholders Hints</Tag>
+        <Tag>USD</Tag>
+        <Tag color="green">Momentum Model</Tag>
+        <Tag color="gray">Realised Valuation</Tag>
+        <Tag color="purple">Oscillator</Tag>
       </div>
 
       <div class="m--flex">
         <div>
           <h1 class="c-chart__title mt-20">
-            Realised Cap and MVRV Ratio
+            Decred Market-Realised Gradient Oscillator
           </h1>
           <div class="c-chart__subtitle">
             {{ lastUpdate | formatDate }}
@@ -26,7 +28,7 @@
           </div>
         </div>
 
-        <div class="ml-auto">
+        <!-- <div class="ml-auto">
           <div class="m--flex">
             <div>
               <div class="c-chart__signal">STRONG BUY - BULLISH</div>
@@ -34,7 +36,7 @@
             </div>
             <SignalIcon type="up" class="ml-4" />
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- Switches -->
@@ -46,14 +48,14 @@
         />
         <div class="m--flex justify-end" style="flex-grow: 1;">
           <Button
-            :inverted="chartType === 'PRICING'"
-            @click="onChangeChartType('PRICING')"
-            >Pricing</Button
+            :inverted="chartType === '28DAY'"
+            @click="onChangeChartType('28DAY')"
+            >28-day</Button
           >
           <Button
-            :inverted="chartType === 'VALUATION'"
-            @click="onChangeChartType('VALUATION')"
-            >Valuation</Button
+            :inverted="chartType === '142DAY'"
+            @click="onChangeChartType('142DAY')"
+            >142-day</Button
           >
           <Button class="ml-3">Share</Button>
         </div>
@@ -61,9 +63,14 @@
     </div>
 
     <div class="c-chart__hint mt-40 text--align-center">
-      <strong>Chart Hints</strong>: MVRV below 0,7 indicates a
-      <strong>BUY ZONE</strong> as the Market Cap is
-      <strong>undervalued</strong> compare with the Realised value.
+      <strong>Chart Hint</strong>: The Market-Realised Gradient Oscillator is a
+      metric that aims to capture periods where the momentum and sentiment of
+      spot markets begins to shift in advance of a slower reaction on-chain. It
+      considers the rate of change (gradient) of the market cap (fast, noisy
+      metric) over a 28-day or 142-day period, and compares it to the equivalent
+      gradient of the realised cap (slow but higher conviction metric). Standard
+      periods used are 28-day and 142-day, coincident with average and maximum
+      vote periods of the Decred ticket pool.
     </div>
 
     <div class="my-4">
@@ -76,31 +83,44 @@
       </client-only>
     </div>
 
+    <div class="my-5 ml-100 mr-150">
+      <img src="@/assets/dcr-gradient-character-explanation.png" width="100%" />
+    </div>
+
     <div class="m--flex columns-two align-start mt-40 mb-150">
       <div class="c-chart__brief">
         <h2>Chart Brief</h2>
         <p>
-          The Realised Cap is the aggregate USD value of all UNSPENT UTXOs,
-          priced at the time they were last transacted. Due to the constant flow
-          of DCR on-chain in Proof-of-Stake tickets, the Decred Realised Cap
-          tends to follow the Market Cap more closely than its Bitcoin
-          equivalent. Realised value is 'attracted' to the spot price during
-          periods of high transaction demand as more DCR gets 'repriced'. This
-          metric tends to create a psychological level of support in bull
-          markets and resistance in bear markets, representing the last time the
-          aggregate market 'interacted' with their coins.
+          The Market-Realised Gradient Oscillator is a metric that aims to
+          capture periods where the momentum and sentiment of spot markets
+          begins to shift in advance of a slower reaction on-chain. It considers
+          the rate of change (gradient) of the market cap (fast, noisy metric)
+          over a 28-day or 142-day period, and compares it to the equivalent
+          gradient of the realised cap (slow but higher conviction metric).
+          Standard periods used are 28-day and 142-day, coincident with average
+          and maximum vote periods of the Decred ticket pool.
         </p>
         <p>
-          The MVRV Ratio measures the relative distance between the market cap
-          and the realised cap. For Decred, this behaves as an oscillator and is
-          ideal identifying periods of extreme under/overvaluation (tops and
-          bottoms) and for support/resistance signals. An MVRV ratio of 1.0
-          indicates price is at psychological support in bull markets and,
-          conversely, a resistance in bear markets.
+          The Delta Gradient metric is calculated as the difference between the
+          Market and Realised gradients. Where this metric breaks above zero
+          from below, it signifies spot pricing is reversing trend to the upside
+          faster than the on-chain realised response. Conversely, a break below
+          zero signifies spot price trend reversal to the downside faster than
+          the on-chain realised response.
+        </p>
+        <p>
+          This metric can also provide market momentum and divergence signals,
+          similar to those commonly used in technical analysis. The height and
+          sequential change in height of oscillator peaks provides insight into
+          the volume of coins moving within, or counter to the prevailing trend.
         </p>
         <p>
           Data Source:
           <a href="https://coinmetrics.io/" target="_blank">Coinmetrics.io</a>
+          and
+          <a href="https://explorer.dcrdata.org/" target="_blank"
+            >explorer.dcrdata.org</a
+          >.
         </p>
         <p></p>
       </div>
@@ -110,7 +130,7 @@
         <p>
           Research paper by
           <a href="https://twitter.com/_Checkmatey_" target="_blank"
-            >_Checkmate_</a
+            >_Checkmatey_</a
           >
           <br />
           <a
@@ -118,26 +138,6 @@
             target="_blank"
           >
             https://medium.com/decred/decred-on-chain-realised-cap-mvrv-ratio-and-gradient-oscillators-a36ed2cc8182
-          </a>
-        </p>
-        <p>
-          Research by CoinMetrics on the Realised Cap
-          <br />
-          <a
-            href="https://coinmetrics.io/realized-capitalization/"
-            target="_blank"
-          >
-            https://coinmetrics.io/realized-capitalization/
-          </a>
-        </p>
-        <p>
-          Research by David Puell on Bitcoin MVRV Ratio
-          <br />
-          <a
-            href="https://medium.com/adaptivecapital/bitcoin-market-value-to-realized-value-mvrv-ratio-3ebc914dbaee"
-            target="_blank"
-          >
-            https://medium.com/adaptivecapital/bitcoin-market-value-to-realized-value-mvrv-ratio-3ebc914dbaee
           </a>
         </p>
         <p></p>
@@ -156,7 +156,7 @@ import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
 
-type ChartType = 'PRICING' | 'VALUATION'
+type ChartType = '28DAY' | '142DAY'
 
 export default Vue.extend({
   layout: 'chart',
@@ -175,7 +175,7 @@ export default Vue.extend({
   data() {
     return {
       chartData: null as Chart | null,
-      chartType: 'VALUATION' as ChartType,
+      chartType: '28DAY' as ChartType,
     }
   },
 
@@ -214,9 +214,9 @@ export default Vue.extend({
   methods: {
     async initChart() {
       const chartUrl =
-        this.chartType === 'VALUATION'
-          ? 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_valuation_usd/mvrv_valuation_usd_light.json'
-          : 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_pricing_usd/mvrv_pricing_usd_light.json'
+        this.chartType === '28DAY'
+          ? 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mrktrealgrad28day_oscillator_usd/mrktrealgrad28day_oscillator_usd_light.json'
+          : 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mrktrealgrad142day_oscillator_usd/mrktrealgrad142day_oscillator_usd_light.json'
 
       const response = await fetch(chartUrl)
       this.chartData = await response.json()

@@ -14,7 +14,7 @@
       <div class="m--flex">
         <div>
           <h1 class="c-chart__title mt-20">
-            Realised Cap and MVRV Ratio
+            Decred Relative BTC Realised Cap and MVRV Ratio
           </h1>
           <div class="c-chart__subtitle">
             {{ lastUpdate | formatDate }}
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div class="ml-auto">
+        <!-- <div class="ml-auto">
           <div class="m--flex">
             <div>
               <div class="c-chart__signal">STRONG BUY - BULLISH</div>
@@ -34,7 +34,7 @@
             </div>
             <SignalIcon type="up" class="ml-4" />
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- Switches -->
@@ -80,27 +80,56 @@
       <div class="c-chart__brief">
         <h2>Chart Brief</h2>
         <p>
-          The Realised Cap is the aggregate USD value of all UNSPENT UTXOs,
-          priced at the time they were last transacted. Due to the constant flow
-          of DCR on-chain in Proof-of-Stake tickets, the Decred Realised Cap
-          tends to follow the Market Cap more closely than its Bitcoin
-          equivalent. Realised value is 'attracted' to the spot price during
-          periods of high transaction demand as more DCR gets 'repriced'. This
-          metric tends to create a psychological level of support in bull
-          markets and resistance in bear markets, representing the last time the
-          aggregate market 'interacted' with their coins.
+          The Relative Realised Caps present a series of pricing models derived
+          from both spot prices and onchain signatures of the DCR/BTC exchange
+          pair. The following realised valuation models are denominated in BTC
+          and attempt to capture a range of methods for valuing across volatile
+          assets of different size, scale and liquidity.
         </p>
         <p>
-          The MVRV Ratio measures the relative distance between the market cap
-          and the realised cap. For Decred, this behaves as an oscillator and is
-          ideal identifying periods of extreme under/overvaluation (tops and
-          bottoms) and for support/resistance signals. An MVRV ratio of 1.0
-          indicates price is at psychological support in bull markets and,
-          conversely, a resistance in bear markets.
+          <strong>Realised Cap (BTC)</strong> - Traditional method for realised
+          cap, pricing each Decred UTXO at the BTC value when it was last spent.
+        </p>
+        <p>
+          <strong>Relative On-chain Cap (BTC)</strong> - Ratio between DCR
+          Realised Cap and Bitcoin Realised Cap giving a relative on-chain
+          pricing model. This metric tends to act as a support level, or lower
+          bound pricing band. When the Decred Realised Cap (numerator)
+          appreciates in price or experiences increased transaction momentum
+          compared to Bitcoin, the pricing metric will increase. Conversely,
+          where the Bitcoin Realised Cap (denominator) appreciates, or where
+          Decred sells off relative to Bitcoin, the metric will shed value.
+        </p>
+        <p>
+          <strong>Relative MVRV Cap (BTC)</strong> - Presents the DCR/BTC value
+          where the ratio of Decred is equal to the MVRV Ratio of BTC. This is
+          the price at which both coins are trading an equal premium or discount
+          relative to their respective Realised Cap. This model tends to act as
+          an upper bound pricing band which on contact, can be interpreted as
+          the point where Decred has amplified the returns of a BTC only
+          position.
+        </p>
+        <p>
+          <strong>Mid Relative Realised Cap</strong> - The midpoint between the
+          Relative On-chain Cap and the Relative MVRV Cap. This metric, by
+          design, captures a mean pricing level and can be used as a support or
+          resistance signal in all market cycles.
+        </p>
+        <p>
+          The Realtive MVRV Ratio Oscillator presents is a representation of the
+          relative premium or discount between Decred and Bitcoin. High
+          oscillator values signal that both coins are trading at a premium and
+          Decred has provided amplified returns over a BTC only position and may
+          singal overvaluation. Conversely, low values signify that DCR has lost
+          value relative to BTC and may signal undervaluation.
         </p>
         <p>
           Data Source:
           <a href="https://coinmetrics.io/" target="_blank">Coinmetrics.io</a>
+          and
+          <a href="https://explorer.dcrdata.org/" target="_blank"
+            >explorer.dcrdata.org</a
+          >.
         </p>
         <p></p>
       </div>
@@ -109,35 +138,15 @@
         <h2>Chart Resources</h2>
         <p>
           Research paper by
-          <a href="https://twitter.com/_Checkmatey_" target="_blank"
-            >_Checkmate_</a
+          <a href="https://twitter.com/PermabullNino" target="_blank"
+            >@permabullnino</a
           >
           <br />
           <a
-            href="https://medium.com/decred/decred-on-chain-realised-cap-mvrv-ratio-and-gradient-oscillators-a36ed2cc8182"
+            href="https://medium.com/@permabullnino/decred-on-chain-mini-pub-1-relative-mvrv-ratio-ea2564ca420f"
             target="_blank"
           >
-            https://medium.com/decred/decred-on-chain-realised-cap-mvrv-ratio-and-gradient-oscillators-a36ed2cc8182
-          </a>
-        </p>
-        <p>
-          Research by CoinMetrics on the Realised Cap
-          <br />
-          <a
-            href="https://coinmetrics.io/realized-capitalization/"
-            target="_blank"
-          >
-            https://coinmetrics.io/realized-capitalization/
-          </a>
-        </p>
-        <p>
-          Research by David Puell on Bitcoin MVRV Ratio
-          <br />
-          <a
-            href="https://medium.com/adaptivecapital/bitcoin-market-value-to-realized-value-mvrv-ratio-3ebc914dbaee"
-            target="_blank"
-          >
-            https://medium.com/adaptivecapital/bitcoin-market-value-to-realized-value-mvrv-ratio-3ebc914dbaee
+            https://medium.com/@permabullnino/decred-on-chain-mini-pub-1-relative-mvrv-ratio-ea2564ca420f
           </a>
         </p>
         <p></p>
@@ -175,7 +184,7 @@ export default Vue.extend({
   data() {
     return {
       chartData: null as Chart | null,
-      chartType: 'VALUATION' as ChartType,
+      chartType: 'PRICING' as ChartType,
     }
   },
 
@@ -215,8 +224,8 @@ export default Vue.extend({
     async initChart() {
       const chartUrl =
         this.chartType === 'VALUATION'
-          ? 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_valuation_usd/mvrv_valuation_usd_light.json'
-          : 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_pricing_usd/mvrv_pricing_usd_light.json'
+          ? 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_valuation_btc/mvrv_valuation_btc_light.json'
+          : 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_pricing_btc/mvrv_pricing_btc_light.json'
 
       const response = await fetch(chartUrl)
       this.chartData = await response.json()
