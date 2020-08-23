@@ -1,5 +1,11 @@
 <template>
-  <div class="c-tag" :class="{ 'is-green': color === 'green' }">
+  <div
+    class="c-tag"
+    :class="{
+      'is-green': color === 'green',
+      'is-purple': color === 'purple',
+    }"
+  >
     <slot></slot>
   </div>
 </template>
@@ -7,7 +13,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 
-type Color = '' | 'green' | 'gray'
+type Color = '' | 'green' | 'gray' | 'purple'
 
 export default Vue.extend({
   props: {
@@ -40,6 +46,10 @@ export default Vue.extend({
 
   &.is-green {
     background-color: $color-green-300;
+  }
+
+  &.is-purple {
+    background-color: $color-purple;
   }
 }
 </style>
