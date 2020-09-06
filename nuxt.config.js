@@ -34,7 +34,11 @@ module.exports = {
    ** Style resources
    */
   styleResources: {
-    scss: ['./assets/_colors.scss'],
+    scss: [
+      //
+      './assets/_colors.scss',
+      './assets/_responsive.scss',
+    ],
   },
   /*
    ** Plugins to load before mounting the App
