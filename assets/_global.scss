@@ -106,6 +106,12 @@ $spacing-sizes: (
       margin-right: 20px;
     }
   }
+
+  &.sm--direction-column {
+    @include media('<=sm') {
+      flex-direction: column;
+    }
+  }
 }
 
 /* Text Alignment */
@@ -121,6 +127,20 @@ $spacing-sizes: (
 
 // Chart
 .c-chart {
+  &__navigation-buttons {
+    display: flex;
+    margin: 40px 30px 0;
+  }
+
+  &__title-wrapper {
+    display: flex;
+    margin-top: 20px;
+
+    @include media('<=sm') {
+      flex-direction: column;
+    }
+  }
+
   &__title {
     font-family: 'Source Sans Pro';
     font-weight: normal;
@@ -135,6 +155,61 @@ $spacing-sizes: (
     font-size: 18px;
     line-height: 23px;
     color: $color-blue-100;
+  }
+
+  &__indicator-wrapper {
+    margin-left: auto;
+
+    @include media('<=sm') {
+      margin-left: 0;
+      margin-top: 30px;
+    }
+  }
+
+  &__indicator {
+    display: flex;
+  }
+
+  &__toggles-wrapper {
+    display: flex;
+    margin-top: 40px;
+
+    @include media('<=sm') {
+      flex-direction: column;
+    }
+  }
+
+  &__toggles-right {
+    display: flex;
+    // justify-items: flex-end;
+    // flex-grow: 1;
+    margin-left: auto;
+
+    @include media('<=sm') {
+      margin-left: 0;
+      margin-top: 30px;
+    }
+  }
+
+  &__tags {
+    & > * {
+      &:not(:last-child) {
+        margin-right: 12px;
+      }
+    }
+
+    @include media('<=sm') {
+      display: flex;
+      // flex-direction: column;
+      flex-wrap: wrap;
+
+      & > * {
+        margin-bottom: 8px;
+
+        // &:not(:last-child) {
+        // }
+      }
+    }
   }
 
   &__last-update {
@@ -169,6 +244,10 @@ $spacing-sizes: (
       margin-right: 10px;
       margin-bottom: 4px;
     }
+
+    @include media('<=sm') {
+      max-width: 100%;
+    }
   }
 
   &__hint {
@@ -177,6 +256,30 @@ $spacing-sizes: (
     font-size: 16px;
     line-height: 20px;
     color: $color-blue-100;
+  }
+
+  &__brief-wrapper {
+    // m--flex columns-two align-start mt-40 mb-150
+    display: flex;
+    align-items: flex-start;
+    margin-top: 40px;
+    margin-bottom: 150px;
+    padding: 0 30px;
+
+    & > * {
+      flex-basis: 50%;
+      margin-right: 20px;
+    }
+
+    @include media('<=sm') {
+      flex-direction: column;
+
+      & > * {
+        flex-basis: 100%;
+        margin-right: 0;
+        padding: 12px 0;
+      }
+    }
   }
 
   &__brief,

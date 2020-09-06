@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="m--flex mt-40">
+    <div class="c-chart__navigation-buttons">
       <Button prependIcon="arrow-left">Previous chart</Button>
       <Button appendIcon="arrow-right" class="ml-auto">Next chart</Button>
     </div>
 
     <div class="mx-40 mt-50">
-      <div class="">
+      <div class="c-chart__tags">
         <Tag color="green">Novice Friendly</Tag>
         <Tag color="gray">Stakeholders Hints</Tag>
       </div>
 
-      <div class="m--flex">
+      <div class="c-chart__title-wrapper mt-20">
         <div>
-          <h1 class="c-chart__title mt-20">
+          <h1 class="c-chart__title">
             Decred Mayer Multiple Bands
           </h1>
           <div class="c-chart__subtitle">
@@ -25,8 +25,8 @@
           </div>
         </div>
 
-        <div class="ml-auto">
-          <div class="m--flex">
+        <div class="c-chart__indicator-wrapper">
+          <div class="c-chart__indicator">
             <div>
               <div class="c-chart__signal">STRONG BUY - BULLISH</div>
               <div class="c-chart__signal-value">MVRV Ratio = 0.50</div>
@@ -37,13 +37,14 @@
       </div>
 
       <!-- Switches -->
-      <div class="m--flex mt-40">
+      <div class="c-chart__toggles-wrapper">
         <ChartToggles
           :chartData="chartData"
           class="c-chart__data-switches"
           @change="onChangeChartData"
         />
-        <div class="m--flex justify-end" style="flex-grow: 1;">
+
+        <div class="c-chart__toggles-right">
           <Button inverted>USD</Button>
           <Button>BTC</Button>
           <Button class="ml-3">Share</Button>
@@ -67,7 +68,7 @@
       </client-only>
     </div>
 
-    <div class="m--flex columns-two align-start mt-40 mb-150">
+    <div class="c-chart__brief-wrapper">
       <div class="c-chart__brief">
         <h2>Chart Brief</h2>
         <p>
