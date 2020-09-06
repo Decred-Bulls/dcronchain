@@ -26,7 +26,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$size: '54px';
+$size: 54px;
 
 .c-signal-icon {
   width: $size;
