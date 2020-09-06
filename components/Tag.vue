@@ -36,13 +36,8 @@ export default Vue.extend({
   display: inline-block;
   border-radius: 15px;
   padding: 2px 14px;
-  /* BG / White 4 - #F9FAFA */
   color: #f9fafa;
   background-color: $color-gray-600;
-
-  & + & {
-    margin-left: 12px;
-  }
 
   &.is-green {
     background-color: $color-green-300;
