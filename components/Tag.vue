@@ -2,8 +2,11 @@
   <div
     class="c-tag"
     :class="{
+      'is-blue': color === 'blue',
       'is-green': color === 'green',
       'is-purple': color === 'purple',
+      'is-red': color === 'red',
+      'is-yellow': color === 'yellow',
     }"
   >
     <slot></slot>
@@ -13,7 +16,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 
-type Color = '' | 'green' | 'gray' | 'purple'
+type Color = '' | 'blue' | 'green' | 'gray' | 'purple' | 'red'
 
 export default Vue.extend({
   props: {
@@ -28,7 +31,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .c-tag {
-  font-family: Source Sans Pro;
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -39,12 +42,25 @@ export default Vue.extend({
   color: #f9fafa;
   background-color: $color-gray-600;
 
+  &.is-blue {
+    background-color: $color-blue-500;
+  }
+
   &.is-green {
     background-color: $color-green-300;
   }
 
   &.is-purple {
     background-color: $color-purple;
+  }
+
+  &.is-red {
+    background-color: $color-red;
+  }
+
+  &.is-yellow {
+    background-color: $color-yellow-300;
+    color: $color-blue-100;
   }
 }
 </style>

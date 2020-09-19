@@ -36,7 +36,7 @@ module.exports = {
   styleResources: {
     scss: [
       //
-      './assets/_colors.scss',
+      './assets/_variables.scss',
       './assets/_responsive.scss',
     ],
   },

@@ -6,7 +6,7 @@
       <nuxt />
     </div>
 
-    <Footer />
+    <Footer class="mt-50" />
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="c-footer mt-50">
+  <div class="c-footer">
     <div class="c-footer__content">
       <div class="c-footer__row">
         <div class="c-footer__links2">
