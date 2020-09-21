@@ -1,13 +1,13 @@
 <template>
   <div class="c-monetary-card">
     <!--  -->
-    <div class="c-title">{{ title }}</div>
+    <div class="title">{{ title }}</div>
 
     <div class="c-content">
-      <div class="c-icon">
-        <IconUp v-if="change >= 1" class="c-icon" />
-        <IconDown v-if="change <= -1" class="c-icon" />
-        <IconNeutral v-if="change > -1 && change < 1" class="c-icon" />
+      <div class="icon">
+        <IconUp v-if="change >= 1" class="icon" />
+        <IconDown v-if="change <= -1" class="icon" />
+        <IconNeutral v-if="change > -1 && change < 1" class="icon" />
       </div>
       <div class="ml-3">
         <div class="c-value">
@@ -69,7 +69,7 @@ export default Vue.extend({
   border-radius: 3px;
   padding: 4px 20px 8px;
 
-  .c-title {
+  .title {
     font-weight: 600;
     font-size: 20px;
     line-height: 25px;
@@ -84,7 +84,7 @@ export default Vue.extend({
     margin-top: 4px;
   }
 
-  .c-icon {
+  .icon {
     width: 50px;
     height: 50px;
   }
