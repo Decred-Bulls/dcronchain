@@ -119,29 +119,41 @@
           </div>
         </div>
 
-        <el-row :gutter="32" class="mt-4">
-          <el-col span="12">
+        <el-row :gutter="32" type="flex" class="mt-4">
+          <el-col
+            v-loading="isChartLoading"
+            :span="16"
+            element-loading-background="transparent"
+            class="m--flex justify-center"
+          >
             <!--  -->
-            <img src="@/assets/images/chart-mayer-sample.png" width="100%" />
+            <!-- <img src="@/assets/images/chart-mayer-sample.png" width="100%" /> -->
+            <!-- <div
+              v-loading="isChartLoading"
+              element-loading-background="transparent"
+              class="m--flex justify-center"
+              style="position: relative;"
+            ></div> -->
+            <client-only>
+              <Plotly
+                v-if="!isChartLoading && chartData"
+                :data="chartData.data"
+                :layout="chartLayout"
+                :options="chartData.options"
+              ></Plotly>
+            </client-only>
           </el-col>
-          <el-col span="12">
+          <el-col :span="8">
             <!--  -->
             <h4>Abstract</h4>
             <p>
-              Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam eaque ipsa,
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas
-              sit, aspernatur aut odit aut fugit, sed quia consequuntur magni
-              dolores eos, qui ratione voluptatem sequi nesciunt, neque porro
-              quisquam est, qui dolorem ipsum, quia dolor sit amet, consectetur,
-              adipisci[ng] velit, sed quia non numquam [do] eius modi tempora
-              inci[di]dunt, ut labore et dolore magnam aliquam quaerat
-              voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem
-              ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-              consequatur? Quis autem vel eum iure reprehenderit, qui in ea
-              voluptate velit esse, quam nihil molestiae consequatur, vel illum,
-              qui dolorem eum fugiat, quo voluptas nulla pariatur?
+              The Mayer Multiple is a simple oscillator calculated by taking the
+              ratio of the current DCR/USD Price to its 200-day moving average.
+              The 200-day moving average is a very common indicator in technical
+              analysis and is often used to calibrate macro bull/bear bias. The
+              Mayer Multiple is a metric that presents the deviation of price
+              from this long term mean as an oscillator with historically
+              relevant probabilities of occurence.
             </p>
           </el-col>
         </el-row>
@@ -157,7 +169,7 @@
           </el-col>
           <el-col span="6">
             <MonetaryCard
-              title="Market Cap Value"
+              title="Real Market Cap Value"
               value="$ 162.45 M"
               :change="-0.3"
               changeLabel="Change (7d)"
@@ -165,7 +177,7 @@
           </el-col>
           <el-col span="6">
             <MonetaryCard
-              title="Market Cap Value"
+              title="Total Block Reward"
               value="$ 162.45 M"
               :change="-1.3"
               changeLabel="Change (7d)"
@@ -173,7 +185,7 @@
           </el-col>
           <el-col span="6">
             <MonetaryCard
-              title="Market Cap Value"
+              title="Total Tickets Bound Cap"
               value="$ 162.45 M"
               :change="0.3"
               changeLabel="Change (7d)"
@@ -269,12 +281,14 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import { createKey } from '@/utils'
 import ChartCard from '~/components/ChartCard/index.vue'
 import GaugeCard from '~/components/GaugeCard/index.vue'
 import MonetaryCard from '~/components/MonetaryCard/index.vue'
 import Logo from '~/components/Logo.vue'
 import Section from '~/components/Section/index.vue'
 import Tag from '~/components/Tag.vue'
+import { Plotly } from 'vue-plotly'
 
 const tableSignalsSample = require('@/data/homepage-signals-sample.json')
 const tableInsightsSample = require('@/data/homepage-insights-sample.json')
@@ -283,8 +297,9 @@ export default Vue.extend({
   components: {
     ChartCard,
     GaugeCard,
-    MonetaryCard,
     Logo,
+    MonetaryCard,
+    Plotly,
     Section,
     Tag,
   },
@@ -292,13 +307,50 @@ export default Vue.extend({
   data() {
     return {
       //
+      isChartLoading: true,
+      chartData: null as Chart | null,
       tableSignals: tableSignalsSample,
       tableInsights: tableInsightsSample,
     }
   },
 
+  async mounted() {
+    try {
+      const response = await fetch(
+        'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
+      )
+      this.chartData = await response.json()
+
+      if (this.chartData) {
+        this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
+          return {
+            ...d,
+            key: createKey(d.name, idx),
+            show: true,
+            showToggle: d.showlegend,
+            showlegend: false,
+          }
+        })
+      }
+    } catch (err) {
+      console.error(err)
+    }
+
+    this.isChartLoading = false
+  },
+
   computed: {
     //
+    chartLayout(): any {
+      if (!this.chartData) {
+        return {}
+      }
+
+      return {
+        ...((this.chartData as unknown) as Chart).layout,
+        height: 500,
+      }
+    },
   },
 
   methods: {
