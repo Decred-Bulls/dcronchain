@@ -47,11 +47,11 @@ export default Vue.extend({
   }
 
   &.is-green {
-    background-color: $color-green-300;
+    background-color: $color-green;
   }
 
   &.is-purple {
-    background-color: $color-purple;
+    background-color: $color-purple-300;
   }
 
   &.is-red {

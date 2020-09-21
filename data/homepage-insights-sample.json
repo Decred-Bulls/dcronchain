@@ -1,0 +1,27 @@
+{
+  "columns": ["name", "primary", "secondary", "statusbar", "description"],
+  "index": [0, 1, 2],
+  "data": [
+    [
+      "Treasury Growth",
+      642596.9462955202,
+      630995.5861379601,
+      100.0,
+      "Primary: Today Balance, Secondary: Last Month Balance, Statusbar: IncomeSpent%"
+    ],
+    [
+      "Decred Power",
+      13.0960281488,
+      17.690612375,
+      35.0837992556,
+      "Primary: Today Price, Secondary: Last Month Price, Statusbar: MonthlyChange%"
+    ],
+    [
+      "Realised Cap",
+      213463306.4442458153,
+      218379106.2675210536,
+      2.3028781411,
+      "Primary: Today RealisedCapUSD, Secondary: LastMonth RealisedCapUSD, Statusbar: MonthlyChange%"
+    ]
+  ]
+}
