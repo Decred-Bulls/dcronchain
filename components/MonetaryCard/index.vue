@@ -5,20 +5,27 @@
 
     <div class="c-content">
       <div class="icon">
-        <IconUp v-if="change >= 1" class="icon" />
-        <IconDown v-if="change <= -1" class="icon" />
-        <IconNeutral v-if="change > -1 && change < 1" class="icon" />
+        <IconUp v-if="changeAsNumber >= 1" class="icon" />
+        <IconDown v-if="changeAsNumber <= -1" class="icon" />
+        <IconNeutral
+          v-if="changeAsNumber > -1 && changeAsNumber < 1"
+          class="icon"
+        />
       </div>
       <div class="ml-3">
         <div class="c-value">
           {{ value }}
         </div>
         <div class="c-change text--align-right">
-          <span v-if="change >= 1" class="color-green"> +{{ change }}% </span>
-          <span v-if="change <= -1" class="color-red"> {{ change }}% </span>
-          <span v-if="change > -1 && change < 1">
-            <!-- <span v-if="change < 0">-</span>  -->
-            {{ change }}%
+          <span v-if="changeAsNumber >= 1" class="color-green">
+            +{{ changeAsNumber }}%
+          </span>
+          <span v-if="changeAsNumber <= -1" class="color-red">
+            {{ changeAsNumber }}%
+          </span>
+          <span v-if="changeAsNumber > -1 && changeAsNumber < 1">
+            <!-- <span v-if="changeAsNumber < 0">-</span>  -->
+            {{ changeAsNumber }}%
           </span>
           <span> {{ changeLabel }} </span>
         </div>
@@ -51,12 +58,18 @@ export default Vue.extend({
       required: true,
     },
     change: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
     changeLabel: {
       type: String,
       required: true,
+    },
+  },
+
+  computed: {
+    changeAsNumber(): number {
+      return Number(this.change)
     },
   },
 })
