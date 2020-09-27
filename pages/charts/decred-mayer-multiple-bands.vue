@@ -8,7 +8,8 @@
     <div class="mx-40 mt-50">
       <div class="c-chart__tags">
         <Tag color="green">Novice Friendly</Tag>
-        <Tag color="gray">Stakeholders Hints</Tag>
+        <Tag color="purple">Network Valuation </Tag>
+        <Tag color="gray">Pricing Model </Tag>
       </div>
 
       <div class="c-chart__title-wrapper mt-20">
@@ -25,13 +26,29 @@
           </div>
         </div>
 
-        <div class="c-chart__indicator-wrapper">
+        <div v-if="lastMayerMultiple" class="c-chart__indicator-wrapper">
           <div class="c-chart__indicator">
             <div>
-              <div class="c-chart__signal">STRONG BUY - BULLISH</div>
-              <div class="c-chart__signal-value">MVRV Ratio = 0.50</div>
+              <div class="c-chart__signal">{{ lastValueSignal }}</div>
+              <div class="c-chart__signal-value">
+                Mayer Multiple = {{ lastMayerMultiple | roundTo2DP }}
+              </div>
             </div>
-            <SignalIcon type="up" class="ml-4" />
+            <SignalIcon
+              v-if="lastValueSignal.includes('BUY')"
+              type="up"
+              class="ml-4"
+            />
+            <SignalIcon
+              v-if="lastValueSignal.includes('SELL')"
+              type="down"
+              class="ml-4"
+            />
+            <SignalIcon
+              v-if="lastValueSignal === 'NEUTRAL'"
+              type="neutral"
+              class="ml-4"
+            />
           </div>
         </div>
       </div>
@@ -44,19 +61,17 @@
           @change="onChangeChartData"
         />
 
-        <div class="c-chart__toggles-right">
+        <!-- <div class="c-chart__toggles-right">
           <Button inverted>USD</Button>
           <Button>BTC</Button>
           <Button class="ml-3">Share</Button>
-        </div>
+        </div> -->
       </div>
     </div>
 
-    <div class="c-chart__hint mt-40 text--align-center">
-      <strong>Chart Hints</strong>: MVRV below 0,7 indicates a
-      <strong>BUY ZONE</strong> as the Market Cap is
-      <strong>undervalued</strong> compare with the Realised value.
-    </div>
+    <!-- <div class="c-chart__hint mt-40 text--align-center">
+      <strong>Chart Hints</strong>
+    </div> -->
 
     <div class="my-4">
       <client-only>
@@ -79,6 +94,15 @@
           Mayer Multiple is a metric that presents the deviation of price from
           this long term mean as an oscillator with historically relevant
           probabilities of occurence shown as follows:
+        </p>
+        <ul class="my-3">
+          <li>Mayer Multiple 0.4 = 10% occurence</li>
+          <li>Mayer Multiple 0.6 = 25% occurence</li>
+          <li>Mayer Multiple 2.0 = 25% occurence</li>
+          <li>Mayer Multiple 2.8 = 10% occurence</li>
+        </ul>
+        <p>
+          Data Source: Coinmetrics.io
         </p>
       </div>
       <div class="c-chart__resources">
@@ -109,6 +133,8 @@ import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
 
+type SignalType = 'BUY' | 'STRONG BUY' | 'SELL' | 'STRONG SELL' | 'NEUTRAL'
+
 export default Vue.extend({
   layout: 'chart',
 
@@ -130,10 +156,13 @@ export default Vue.extend({
   },
 
   async mounted() {
-    const response = await fetch(
-      'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
-    )
-    this.chartData = await response.json()
+    try {
+      this.chartData = await this.$axios.$get(
+        'https://raw.githubusercontent.com/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
+      )
+    } catch (err) {
+      console.error(err)
+    }
 
     if (this.chartData) {
       this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
@@ -170,6 +199,40 @@ export default Vue.extend({
         ...((this.chartData as unknown) as Chart).layout,
         height: 600,
       }
+    },
+    lastMayerMultiple(): number | null {
+      if (this.chartData) {
+        const data = this.chartData.data.find(
+          (d) => d.name === 'Mayer Multiple'
+        )
+
+        if (!data || !data.y) {
+          return null
+        }
+        const lastValue = data.y[data.y.length - 1]
+        return lastValue
+      }
+      return null
+    },
+    lastValueSignal(): SignalType | null {
+      const value = this.lastMayerMultiple
+      if (!value) {
+        return null
+      }
+
+      if (value <= 0.4) {
+        return 'STRONG BUY'
+      }
+      if (value <= 0.6) {
+        return 'BUY'
+      }
+      if (value <= 2) {
+        return 'NEUTRAL'
+      }
+      if (value <= 2.8) {
+        return 'SELL'
+      }
+      return 'STRONG SELL'
     },
     lastUpdate(): Date {
       return new Date()
