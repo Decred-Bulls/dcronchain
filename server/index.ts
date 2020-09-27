@@ -45,7 +45,7 @@ async function start() {
   }
 
   // Setup routes
-  app.use('/api', routes)
+  // app.use('/api', routes)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
