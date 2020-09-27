@@ -1,0 +1,40 @@
+{
+  "schema": {
+    "fields": [
+      { "name": "index", "type": "integer" },
+      { "name": "name", "type": "string" },
+      { "name": "today", "type": "number" },
+      { "name": "yesterday", "type": "number" },
+      { "name": "past_week", "type": "number" },
+      { "name": "28dayMA", "type": "number" }
+    ],
+    "primaryKey": ["index"],
+    "pandas_version": "0.20.0"
+  },
+  "data": [
+    {
+      "index": 0,
+      "name": "200DMA",
+      "today": 14.3910538874,
+      "yesterday": 14.4128191908,
+      "past_week": 14.5674529799,
+      "28dayMA": 14.7667715974
+    },
+    {
+      "index": 1,
+      "name": "Mayer_Multiple",
+      "today": 0.838436562,
+      "yesterday": 0.8420275822,
+      "past_week": 0.8669868965,
+      "28dayMA": 0.926990768
+    },
+    {
+      "index": 2,
+      "name": "PriceUSD",
+      "today": 12.0659857449,
+      "yesterday": 12.1359912953,
+      "past_week": 12.6297908484,
+      "28dayMA": 13.7064250727
+    }
+  ]
+}

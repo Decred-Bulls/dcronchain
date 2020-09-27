@@ -174,38 +174,38 @@
         </el-row>
 
         <el-row :gutter="20" class="mt-5">
-          <el-col :span="6">
+          <el-col :span="8">
             <MonetaryCard
-              title="Market Cap Value"
-              value="$ 162.45 M"
-              :change="1.3"
+              title="200-Day Moving Average"
+              :value="featuredChart200DMA.currentValue | roundTo2DP"
+              :change="featuredChart200DMA.pctChange | roundTo2DP"
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <MonetaryCard
-              title="Real Market Cap Value"
-              value="$ 162.45 M"
-              :change="-0.3"
+              title="Mayer Multiple"
+              :value="featuredChartMayerMultiple.currentValue | roundTo2DP"
+              :change="featuredChartMayerMultiple.pctChange | roundTo2DP"
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <MonetaryCard
-              title="Total Block Reward"
-              value="$ 162.45 M"
-              :change="-1.3"
+              title="Price (USD)"
+              :value="featuredChartPriceUSD.currentValue | roundTo2DP"
+              :change="featuredChartPriceUSD.pctChange | roundTo2DP"
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <MonetaryCard
               title="Total Tickets Bound Cap"
               value="$ 162.45 M"
               :change="0.3"
               changeLabel="Change (7d)"
             />
-          </el-col>
+          </el-col> -->
         </el-row>
       </div>
     </Section>
@@ -301,6 +301,7 @@ import Tag from '~/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
 
 const featuredInsightsSample = require('@/data/homepage-featured-insights.json')
+const featuredChartInsightsSample = require('@/data/homepage-featured-chart-insights.json')
 const tableInsightsSample = require('@/data/homepage-insights-sample.json')
 const tableMetricsSample = require('@/data/homepage-metrics-sample.json')
 
@@ -324,6 +325,7 @@ export default Vue.extend({
       isChartLoading: true,
       chartData: null as Chart | null,
       featuredInsights: featuredInsightsSample,
+      featuredChartInsights: featuredChartInsightsSample,
       tableMetrics: tableMetricsSample,
       tableInsights: tableInsightsSample,
     }
@@ -364,6 +366,36 @@ export default Vue.extend({
       return {
         ...((this.chartData as unknown) as Chart).layout,
         height: 500,
+      }
+    },
+    featuredChart200DMA(): any {
+      const data = this.featuredChartInsights.data[0]
+      const pct = data.today / data.past_week
+      const pctChange = pct - 1
+      return {
+        currentValue: data.today,
+        pct,
+        pctChange,
+      }
+    },
+    featuredChartMayerMultiple(): any {
+      const data = this.featuredChartInsights.data[1]
+      const pct = data.today / data.past_week
+      const pctChange = pct - 1
+      return {
+        currentValue: data.today,
+        pct,
+        pctChange,
+      }
+    },
+    featuredChartPriceUSD(): any {
+      const data = this.featuredChartInsights.data[2]
+      const pct = data.today / data.past_week
+      const pctChange = pct - 1
+      return {
+        currentValue: data.today,
+        pct,
+        pctChange,
       }
     },
     featuredTreasuryGrowth(): any {
@@ -411,7 +443,7 @@ export default Vue.extend({
 
   methods: {
     //
-    normalizeFeaturedValue(value: number, origScale = 200, newScale = 1) {
+    normalizeFeaturedValue(value: number) {
       if (value < -50) {
         return -2
       }
