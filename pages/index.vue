@@ -43,30 +43,45 @@
 
       <el-row :gutter="20" class="mt-20">
         <el-col :span="8">
-          <GaugeCard icon="safe" :value="1">
+          <GaugeCard icon="safe" :value="featuredTreasuryGrowth.scale">
             <template v-slot:header> Treasury Growth </template>
             <template v-slot:content>
-              <strong>-0,95%</strong> DCR THAN LAST MONTH
+              <strong>
+                {{ featuredTreasuryGrowth.pctChange | formatPct }}
+              </strong>
+              DCR THAN LAST MONTH
             </template>
-            <template v-slot:text> Current treasury value: 11.2M USD </template>
+            <template v-slot:text>
+              Current treasury:
+              {{ featuredTreasuryGrowth.currentValue | roundTo2DP }}
+              DCR
+            </template>
           </GaugeCard>
         </el-col>
         <el-col :span="8">
-          <GaugeCard icon="hand" :value="2">
+          <GaugeCard icon="hand" :value="featuredDecredPower.scale">
             <template v-slot:header> Decred Power </template>
             <template v-slot:content>
-              <strong>+0,95%</strong> DCR THAN YESTERDAY
+              <strong>{{ featuredDecredPower.pctChange | formatPct }}</strong>
+              DCR THAN LAST MONTH
             </template>
-            <template v-slot:text> Current treasury value: 11.2M USD </template>
+            <template v-slot:text>
+              Current DCR price:
+              {{ featuredDecredPower.currentValue | formatPrice }}
+            </template>
           </GaugeCard>
         </el-col>
         <el-col :span="8">
-          <GaugeCard icon="cart" :value="-2">
-            <template v-slot:header> Mayer Multiple Oscillator </template>
+          <GaugeCard icon="cart" :value="featuredRealisedCap.scale">
+            <template v-slot:header> Realised Cap (USD) </template>
             <template v-slot:content>
-              <strong>Bullish</strong> strong buy
+              <strong> {{ featuredRealisedCap.pctChange | formatPct }} </strong>
+              USD THAN LAST MONTH
             </template>
-            <template v-slot:text> MVRV ratio: 0.50 </template>
+            <template v-slot:text>
+              Today's Realised Cap (USD):
+              {{ featuredRealisedCap.currentValue | formatPrice }}
+            </template>
           </GaugeCard>
         </el-col>
       </el-row>
@@ -159,7 +174,7 @@
         </el-row>
 
         <el-row :gutter="20" class="mt-5">
-          <el-col span="6">
+          <el-col :span="6">
             <MonetaryCard
               title="Market Cap Value"
               value="$ 162.45 M"
@@ -167,7 +182,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col span="6">
+          <el-col :span="6">
             <MonetaryCard
               title="Real Market Cap Value"
               value="$ 162.45 M"
@@ -175,7 +190,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col span="6">
+          <el-col :span="6">
             <MonetaryCard
               title="Total Block Reward"
               value="$ 162.45 M"
@@ -183,7 +198,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col span="6">
+          <el-col :span="6">
             <MonetaryCard
               title="Total Tickets Bound Cap"
               value="$ 162.45 M"
@@ -204,37 +219,29 @@
           </span>
         </div>
 
-        <table class="c-table c-table--style-1 mt-5">
-          <thead>
-            <tr>
-              <th v-for="d in tableSignals.columns" :key="d">{{ d }}</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in tableSignals.data" :key="`tr-${row[0]}`">
-              <td v-for="(d, idx) in row" :key="`td-${row[0]}-${idx}`">
-                {{ d }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <TableInsights :data="tableInsightsSorted" class="mt-5" />
 
-        <table class="c-table c-table--style-2 mt-5">
+        <TableMetrics :data="tableMetrics" class="mt-5" />
+        <!-- <table class="c-table c-table--style-2 mt-5">
           <thead>
             <tr>
-              <th v-for="d in tableSignals.columns" :key="d">{{ d }}</th>
-              <th>Details</th>
+              <th>Data Name</th>
+              <th>Current</th>
+              <th>Yesterday</th>
+              <th>Week (7d)</th>
+              <th>28-day MA</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in tableSignals.data" :key="`tr-${row[0]}`">
-              <td v-for="(d, idx) in row" :key="`td-${row[0]}-${idx}`">
-                {{ d }}
-              </td>
+            <tr v-for="row in tableMetrics.data" :key="`tr-${row[0]}`">
+              <td>{{ row.name }}</td>
+              <td>{{ row.today | roundTo2DP }}</td>
+              <td>{{ row.yesterday | roundTo2DP }}</td>
+              <td>{{ row.past_week | roundTo2DP }}</td>
+              <td>{{ row['28dayMA'] | roundTo2DP }}</td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
 
         <!-- <table class="c-table c-table--style-2 mt-5">
           <thead>
@@ -286,12 +293,16 @@ import ChartCard from '~/components/ChartCard/index.vue'
 import GaugeCard from '~/components/GaugeCard/index.vue'
 import MonetaryCard from '~/components/MonetaryCard/index.vue'
 import Logo from '~/components/Logo.vue'
+import SignalIcon from '@/components/SignalIcon/index.vue'
 import Section from '~/components/Section/index.vue'
+import TableInsights from '~/components/TableInsights/index.vue'
+import TableMetrics from '~/components/TableMetrics/index.vue'
 import Tag from '~/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
 
-const tableSignalsSample = require('@/data/homepage-signals-sample.json')
+const featuredInsightsSample = require('@/data/homepage-featured-insights.json')
 const tableInsightsSample = require('@/data/homepage-insights-sample.json')
+const tableMetricsSample = require('@/data/homepage-metrics-sample.json')
 
 export default Vue.extend({
   components: {
@@ -300,7 +311,10 @@ export default Vue.extend({
     Logo,
     MonetaryCard,
     Plotly,
+    SignalIcon,
     Section,
+    TableInsights,
+    TableMetrics,
     Tag,
   },
 
@@ -309,7 +323,8 @@ export default Vue.extend({
       //
       isChartLoading: true,
       chartData: null as Chart | null,
-      tableSignals: tableSignalsSample,
+      featuredInsights: featuredInsightsSample,
+      tableMetrics: tableMetricsSample,
       tableInsights: tableInsightsSample,
     }
   },
@@ -351,10 +366,67 @@ export default Vue.extend({
         height: 500,
       }
     },
+    featuredTreasuryGrowth(): any {
+      const data = this.featuredInsights.data[0]
+      const pct = data.primary / data.secondary
+      const pctChange = pct - 1
+      return {
+        pct,
+        pctChange,
+        currentValue: data.primary,
+        scale: this.normalizeFeaturedValue(data.statusbar),
+      }
+    },
+    featuredDecredPower(): any {
+      const data = this.featuredInsights.data[1]
+      const pct = data.primary / data.secondary
+      const pctChange = pct - 1
+      return {
+        pct,
+        pctChange,
+        currentValue: data.primary,
+        scale: this.normalizeFeaturedValue(data.statusbar),
+      }
+    },
+    featuredRealisedCap(): any {
+      const data = this.featuredInsights.data[2]
+      const pct = data.primary / data.secondary
+      const pctChange = pct - 1
+      return {
+        pct,
+        pctChange,
+        currentValue: data.primary,
+        scale: this.normalizeFeaturedValue(data.statusbar),
+      }
+    },
+    tableInsightsSorted(): any {
+      return {
+        ...this.tableInsights,
+        data: this.tableInsights.data.sort((a: any, b: any) =>
+          a.name === 'Price_DCRBTC_Mid' ? -1 : 1
+        ),
+      }
+    },
   },
 
   methods: {
     //
+    normalizeFeaturedValue(value: number, origScale = 100, newScale = 1) {
+      const normalized = (value / origScale) * newScale
+      if (normalized < 0.25) {
+        return -2
+      }
+      if (normalized < 0.45) {
+        return -1
+      }
+      // if (normalized < 0.55) {
+      //   return 0
+      // }
+      if (normalized < 0.75) {
+        return 1
+      }
+      return 2
+    },
   },
 })
 </script>

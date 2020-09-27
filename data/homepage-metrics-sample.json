@@ -1,0 +1,80 @@
+{
+  "schema": {
+    "fields": [
+      { "name": "index", "type": "integer" },
+      { "name": "name", "type": "string" },
+      { "name": "today", "type": "number" },
+      { "name": "yesterday", "type": "number" },
+      { "name": "past_week", "type": "number" },
+      { "name": "28dayMA", "type": "number" }
+    ],
+    "primaryKey": ["index"],
+    "pandas_version": "0.20.0"
+  },
+  "data": [
+    {
+      "index": 0,
+      "name": "PriceUSD",
+      "today": 11.3987667461,
+      "yesterday": 11.350314327,
+      "past_week": 14.0019947094,
+      "28dayMA": 14.4975431738
+    },
+    {
+      "index": 1,
+      "name": "CapMrktCurUSD",
+      "today": 137167717.8699837625,
+      "yesterday": 136537135.1031503677,
+      "past_week": 168152253.2996328473,
+      "28dayMA": 173601982.6705327332
+    },
+    {
+      "index": 2,
+      "name": "tic_price_avg",
+      "today": 152.1275259434,
+      "yesterday": 152.2897455609,
+      "past_week": 149.5597551522,
+      "28dayMA": 150.5421122283
+    },
+    {
+      "index": 3,
+      "name": "tic_usd_cost",
+      "today": 2611503.6729397047,
+      "yesterday": 2297224.983103476,
+      "past_week": 2881529.622915206,
+      "28dayMA": 3119768.6277434272
+    },
+    {
+      "index": 4,
+      "name": "pow_hashrate_THs_avg",
+      "today": 444806.7509727626,
+      "yesterday": 428537.1237113402,
+      "past_week": 435636.8980263158,
+      "28dayMA": 426373.2967575752
+    },
+    {
+      "index": 5,
+      "name": "TxCnt",
+      "today": 4428.0,
+      "yesterday": 4419.0,
+      "past_week": 4804.0,
+      "28dayMA": 4359.2142857143
+    },
+    {
+      "index": 6,
+      "name": "TxTfrValMeanNtv",
+      "today": 40.38034514,
+      "yesterday": 39.08069898,
+      "past_week": 31.81054968,
+      "28dayMA": 36.2455923389
+    },
+    {
+      "index": 7,
+      "name": "AdrActCnt",
+      "today": 22465.0,
+      "yesterday": 21743.0,
+      "past_week": 24685.0,
+      "28dayMA": 22571.8928571429
+    }
+  ]
+}

@@ -1,27 +1,56 @@
 {
-  "columns": ["name", "primary", "secondary", "statusbar", "description"],
-  "index": [0, 1, 2],
+  "schema": {
+    "fields": [
+      { "name": "index", "type": "integer" },
+      { "name": "name", "type": "string" },
+      { "name": "today", "type": "number" },
+      { "name": "yesterday", "type": "number" },
+      { "name": "past_week", "type": "number" },
+      { "name": "28dayMA", "type": "number" }
+    ],
+    "primaryKey": ["index"],
+    "pandas_version": "0.20.0"
+  },
   "data": [
-    [
-      "Treasury Growth",
-      642596.9462955202,
-      630995.5861379601,
-      100.0,
-      "Primary: Today Balance, Secondary: Last Month Balance, Statusbar: IncomeSpent%"
-    ],
-    [
-      "Decred Power",
-      13.0960281488,
-      17.690612375,
-      35.0837992556,
-      "Primary: Today Price, Secondary: Last Month Price, Statusbar: MonthlyChange%"
-    ],
-    [
-      "Realised Cap",
-      213463306.4442458153,
-      218379106.2675210536,
-      2.3028781411,
-      "Primary: Today RealisedCapUSD, Secondary: LastMonth RealisedCapUSD, Statusbar: MonthlyChange%"
-    ]
+    {
+      "index": 0,
+      "name": "CapMVRVCur",
+      "today": 0.65175302,
+      "yesterday": 0.64596327,
+      "past_week": 0.78004588,
+      "28dayMA": 0.7931088521
+    },
+    {
+      "index": 1,
+      "name": "Mayer_Multiple",
+      "today": 0.7865804553,
+      "yesterday": 0.7812188301,
+      "past_week": 0.9543061891,
+      "28dayMA": 0.9725828422
+    },
+    {
+      "index": 2,
+      "name": "Price_DCRBTC_Mid",
+      "today": 0.0023128387,
+      "yesterday": 0.0023255206,
+      "past_week": 0.0023794193,
+      "28dayMA": 0.002420467
+    },
+    {
+      "index": 3,
+      "name": "MrktGradient",
+      "today": -0.219793261,
+      "yesterday": -0.27895187,
+      "past_week": -0.0935685139,
+      "28dayMA": -0.0865116606
+    },
+    {
+      "index": 4,
+      "name": "UnrealisedPnL_Net",
+      "today": -0.5343235304,
+      "yesterday": -0.5480756241,
+      "past_week": -0.2819758768,
+      "28dayMA": -0.274974535
+    }
   ]
 }

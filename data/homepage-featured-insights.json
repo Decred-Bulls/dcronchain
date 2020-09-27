@@ -1,0 +1,40 @@
+{
+  "schema": {
+    "fields": [
+      { "name": "index", "type": "integer" },
+      { "name": "name", "type": "string" },
+      { "name": "primary", "type": "number" },
+      { "name": "secondary", "type": "number" },
+      { "name": "statusbar", "type": "number" },
+      { "name": "description", "type": "string" }
+    ],
+    "primaryKey": ["index"],
+    "pandas_version": "0.20.0"
+  },
+  "data": [
+    {
+      "index": 0,
+      "name": "Treasury Growth",
+      "primary": 639617.7453088203,
+      "secondary": 633469.09287992,
+      "statusbar": 53.2381005457,
+      "description": "Primary: Today Balance, Secondary: Last Month Balance, Statusbar: IncomeSpent%"
+    },
+    {
+      "index": 1,
+      "name": "Decred Power",
+      "primary": 12.1359912953,
+      "secondary": 16.6502487008,
+      "statusbar": 37.1972696395,
+      "description": "Primary: Today Price, Secondary: Last Month Price, Statusbar: MonthlyChange%"
+    },
+    {
+      "index": 2,
+      "name": "Realised Cap",
+      "primary": 208349627.9006694257,
+      "secondary": 222819842.4336889982,
+      "statusbar": 6.9451597677,
+      "description": "Primary: Today RealisedCapUSD, Secondary: LastMonth RealisedCapUSD, Statusbar: MonthlyChange%"
+    }
+  ]
+}
