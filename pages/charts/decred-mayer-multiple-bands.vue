@@ -18,8 +18,8 @@
             Decred Mayer Multiple Bands
           </h1>
           <div class="c-chart__subtitle">
-            {{ lastUpdate | formatDate }} - Mayer Multiple = 0.9 / DCR Price =
-            $100
+            {{ lastUpdate | formatDate }} - Mayer Multiple =
+            {{ lastMayerMultiple | roundTo2DP }}
           </div>
           <div class="c-chart__last-update">
             Updated {{ lastUpdate | formatDate }}
