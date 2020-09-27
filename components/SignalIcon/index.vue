@@ -1,17 +1,29 @@
 <template>
-  <div class="c-signal-icon" :class="{ 'color--green': type === 'up' }">
+  <div
+    class="c-signal-icon"
+    :class="{
+      'color--green': type === 'up',
+      'color--red': type === 'down',
+    }"
+  >
     <IconArrowUp v-if="type === 'up'" />
+    <IconArrowDown v-if="type === 'down'" />
+    <IconArrowNeutral v-if="type === 'neutral'" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import IconArrowDown from './arrow-down.svg?inline'
+import IconArrowNeutral from './arrow-neutral.svg?inline'
 import IconArrowUp from './arrow-up.svg?inline'
 
-type SignalType = 'up' | 'down'
+type SignalType = 'up' | 'down' | 'neutral'
 
 export default Vue.extend({
   components: {
+    IconArrowDown,
+    IconArrowNeutral,
     IconArrowUp,
   },
 
@@ -35,7 +47,6 @@ $size: 54px;
   height: $size;
   min-height: $size;
   max-height: $size;
-  padding: 10px;
   border-radius: 50%;
 
   &.color--green {
@@ -43,8 +54,8 @@ $size: 54px;
   }
 
   svg {
-    width: 32px;
-    height: 31px;
+    width: $size;
+    height: $size;
   }
 }
 </style>
