@@ -2,8 +2,8 @@
   <div class="c-chart-card">
     <!--  -->
     <div class="icon">
-      <img v-if="icon === 'bar'" src="./bar-chart.png" height="45" />
-      <img v-if="icon === 'pie'" src="./pie-chart.png" height="45" />
+      <IconBarChart v-if="icon === 'bar'" />
+      <IconPieChart v-if="icon === 'pie'" />
     </div>
     <div class="text">
       <slot></slot>
@@ -20,12 +20,19 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import IconBarChart from './bar-chart.svg?inline'
+import IconPieChart from './pie-chart.svg?inline'
 
 type ColorType = 'blue' | 'green' | 'yellow' | 'purple' | 'red'
 type IconType = 'bar' | 'pie'
 
 export default Vue.extend({
   //
+  components: {
+    IconBarChart,
+    IconPieChart,
+  },
+
   props: {
     icon: {
       type: String,
@@ -50,9 +57,22 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  color: $color-blue-100;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: $color-blue-100;
+    color: #fff;
+  }
 
   .icon {
     margin-top: 10px;
+
+    svg {
+      height: 45px;
+      width: auto;
+    }
   }
 
   .text {
@@ -60,7 +80,6 @@ export default Vue.extend({
     font-size: 22px;
     line-height: 22px;
     /* text-align: center; */
-    color: $color-blue-100;
     padding: 4px 20px 12px;
     text-align: center;
   }
