@@ -1,6 +1,6 @@
 // Required for 'typedi' module
 import 'reflect-metadata'
-const express = require('express')
+import express, { Request, Response, NextFunction } from 'express'
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
@@ -18,6 +18,13 @@ import routes from './routes'
 // Set console as Logger
 Container.set('Logger', console)
 
+function forceSsl(req: Request, res: Response, next: NextFunction) {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(['https://dcronchain.com', req.url].join(''))
+  }
+  return next()
+}
+
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
@@ -32,6 +39,11 @@ async function start() {
     await builder.build()
   }
 
+  // Enforce SSL in production
+  if (process.env.NODE_ENV === 'production') {
+    app.use(forceSsl)
+  }
+
   // Setup routes
   app.use('/api', routes)
 
@@ -39,7 +51,7 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  app.listen(Number(port), host, () => {})
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true,
