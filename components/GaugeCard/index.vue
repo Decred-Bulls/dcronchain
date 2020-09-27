@@ -78,6 +78,10 @@ export default Vue.extend({
   text-align: center;
   padding-bottom: 15px;
 
+  @include media('<=sm') {
+    margin-bottom: 16px;
+  }
+
   .header {
     background-color: $color-blue-100;
     font-weight: bold;
