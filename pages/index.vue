@@ -2,14 +2,14 @@
   <div class="p-homepage">
     <Section>
       <div>
-        <h2 class="c-title">Snapshots</h2>
-        <span class="c-subtitle ml-2">
+        <h2 class="c-title mr-2">Snapshots</h2>
+        <span class="c-subtitle">
           Discover Decred Economics
         </span>
       </div>
 
       <el-row v-if="featuredInsights" :gutter="20" class="mt-20">
-        <el-col :span="8">
+        <el-col :lg="8" :md="8" :sm="24">
           <GaugeCard icon="safe" :value="featuredTreasuryGrowth.scale">
             <template v-slot:header> Treasury Growth </template>
             <template v-slot:content>
@@ -25,7 +25,7 @@
             </template>
           </GaugeCard>
         </el-col>
-        <el-col :span="8">
+        <el-col :lg="8" :md="8" :sm="24">
           <GaugeCard icon="hand" :value="featuredDecredPower.scale">
             <template v-slot:header> Decred Power </template>
             <template v-slot:content>
@@ -38,7 +38,7 @@
             </template>
           </GaugeCard>
         </el-col>
-        <el-col :span="8">
+        <el-col :lg="8" :md="8" :sm="24">
           <GaugeCard icon="cart" :value="featuredRealisedCap.scale">
             <template v-slot:header> Realised Cap (USD) </template>
             <template v-slot:content>
@@ -56,8 +56,8 @@
 
     <Section color="alt-1">
       <div>
-        <h2 class="c-title">Analyses &amp; Signals</h2>
-        <span class="c-subtitle ml-2">
+        <h2 class="c-title mr-2">Analyses &amp; Signals</h2>
+        <span class="c-subtitle">
           Visualize the power of Decred
         </span>
       </div>
@@ -103,49 +103,54 @@
         </nuxt-link>
       </div>
 
-      <div class="c-chart__wrapper mt-5 py-5 px-5">
-        <!--  -->
-        <div class="m--flex">
-          <div>
+      <div class="c-chart__wrapper mt-5">
+        <el-row :gutter="32" class="mt-4">
+          <el-col
+            v-loading="isChartLoading"
+            :lg="16"
+            :md="24"
+            :sm="24"
+            element-loading-background="transparent"
+          >
             <Tag color="green">Novice Friendly</Tag>
             <Tag color="blue">Stakeholder Hints</Tag>
             <h2 class="mt-3">Decred Mayer Multiple Bands</h2>
-          </div>
-        </div>
 
-        <el-row :gutter="32" type="flex" class="mt-4">
-          <el-col
-            v-loading="isChartLoading"
-            :span="16"
-            element-loading-background="transparent"
-            class="m--flex justify-center"
-          >
             <client-only>
-              <Plotly
-                v-if="!isChartLoading && chartData"
-                :data="chartData.data"
-                :layout="chartLayout"
-                :options="chartData.options"
-              ></Plotly>
+              <div class="chart mt-4">
+                <Plotly
+                  v-if="!isChartLoading && chartData"
+                  :data="chartData.data"
+                  :layout="chartLayout"
+                  :options="chartData.options"
+                ></Plotly>
+              </div>
             </client-only>
           </el-col>
-          <el-col :span="8">
+          <el-col :lg="8" :md="24" :sm="24">
             <!--  -->
-            <h4>Abstract</h4>
-            <p>
-              The Mayer Multiple is a simple oscillator calculated by taking the
-              ratio of the current DCR/USD Price to its 200-day moving average.
-              The 200-day moving average is a very common indicator in technical
-              analysis and is often used to calibrate macro bull/bear bias. The
-              Mayer Multiple is a metric that presents the deviation of price
-              from this long term mean as an oscillator with historically
-              relevant probabilities of occurence.
-            </p>
+            <div class="m--flex justify-end">
+              <nuxt-link to="/charts/decred-mayer-multiple-bands">
+                <Button size="big" transparent>See details and research</Button>
+              </nuxt-link>
+            </div>
+            <div class="mt-70">
+              <h2>Abstract</h2>
+              <p class="mt-3">
+                The Mayer Multiple is a simple oscillator calculated by taking
+                the ratio of the current DCR/USD Price to its 200-day moving
+                average. The 200-day moving average is a very common indicator
+                in technical analysis and is often used to calibrate macro
+                bull/bear bias. The Mayer Multiple is a metric that presents the
+                deviation of price from this long term mean as an oscillator
+                with historically relevant probabilities of occurence.
+              </p>
+            </div>
           </el-col>
         </el-row>
 
         <el-row v-if="featuredChartInsights" :gutter="20" class="mt-5">
-          <el-col :span="6">
+          <el-col :lg="6" :md="8" :sm="24">
             <MonetaryCard
               title="Mayer Multiple"
               :value="featuredChartMayerMultiple.currentValue | roundTo2DP"
@@ -153,7 +158,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="6">
+          <el-col :lg="6" :md="8" :sm="24">
             <MonetaryCard
               title="Price (USD)"
               :value="featuredChartPriceUSD.currentValue | roundTo2DP"
@@ -161,7 +166,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="6">
+          <el-col :lg="6" :md="8" :sm="24">
             <MonetaryCard
               title="200-Day MA (USD)"
               :value="featuredChart200DMA.currentValue | roundTo2DP"
@@ -184,8 +189,8 @@
     <Section color="alt-2">
       <div class="c-section__content">
         <div>
-          <h2 class="c-title">Expert data &amp; insights</h2>
-          <span class="c-subtitle ml-2">
+          <h2 class="c-title mr-2">Expert data &amp; insights</h2>
+          <span class="c-subtitle">
             Get the evolution of Decred economics
           </span>
         </div>
@@ -205,6 +210,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import { createKey } from '@/utils'
+import Button from '~/components/Button/index.vue'
 import ChartCard from '~/components/ChartCard/index.vue'
 import GaugeCard from '~/components/GaugeCard/index.vue'
 import MonetaryCard from '~/components/MonetaryCard/index.vue'
@@ -218,6 +224,7 @@ import { Plotly } from 'vue-plotly'
 
 export default Vue.extend({
   components: {
+    Button,
     ChartCard,
     GaugeCard,
     Logo,
@@ -435,6 +442,13 @@ export default Vue.extend({
   align-items: center;
   text-align: center;
 
+  a,
+  a:hover,
+  a:active,
+  a:visited {
+    text-decoration: none;
+  }
+
   .c-title {
     font-weight: 600;
     font-size: 32px;
@@ -449,12 +463,25 @@ export default Vue.extend({
     font-weight: 600;
     color: $color-gray-600;
     text-transform: none;
+
+    @include media('<=sm') {
+      display: block;
+    }
   }
 
   .c-tags-list {
     & > * {
       &:not(:last-child) {
         margin-right: 20px;
+      }
+    }
+
+    @include media('<=sm') {
+      & > * {
+        &:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 12px;
+        }
       }
     }
   }
@@ -468,17 +495,33 @@ export default Vue.extend({
       }
     }
 
-    a,
-    a:hover,
-    a:active,
-    a:visited {
-      text-decoration: none;
+    @include media('<=sm') {
+      flex-direction: column;
+
+      & > * {
+        &:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 16px;
+        }
+      }
     }
   }
 
   .c-chart__wrapper {
     background: #f3f5f6;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    padding: 32px;
+
+    @include media('<=sm') {
+      margin-left: -40px;
+      margin-right: -40px;
+      /* padding: 0; */
+
+      .chart {
+        margin-left: -70px;
+        margin-right: -80px;
+      }
+    }
   }
 
   .c-table {
