@@ -150,7 +150,7 @@
         </el-row>
 
         <el-row v-if="featuredChartInsights" :gutter="20" class="mt-5">
-          <el-col :lg="6" :md="8" :sm="24">
+          <el-col :lg="6" :md="8" :xs="20">
             <MonetaryCard
               title="Mayer Multiple"
               :value="featuredChartMayerMultiple.currentValue | roundTo2DP"
@@ -158,7 +158,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :lg="6" :md="8" :sm="24">
+          <el-col :lg="6" :md="8" :xs="20">
             <MonetaryCard
               title="Price (USD)"
               :value="featuredChartPriceUSD.currentValue | roundTo2DP"
@@ -166,7 +166,7 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :lg="6" :md="8" :sm="24">
+          <el-col :lg="6" :md="8" :xs="20">
             <MonetaryCard
               title="200-Day MA (USD)"
               :value="featuredChart200DMA.currentValue | roundTo2DP"
