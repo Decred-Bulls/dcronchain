@@ -1,39 +1,6 @@
 <template>
   <div class="p-homepage">
     <Section>
-      <h1>List of charts</h1>
-      <ul class="mt-3">
-        <li>
-          <nuxt-link to="/charts/decred-mayer-multiple-bands"
-            >Mayer Multiple Bands</nuxt-link
-          >
-        </li>
-        <li>
-          <nuxt-link to="/charts/decred-realised-cap-and-mvrv-ratio"
-            >Realised cap and MVRV ratio</nuxt-link
-          >
-        </li>
-
-        <li>
-          <nuxt-link
-            to="/charts/decred-relative-bitcoin-realised-cap-and-mvrv-ratio"
-            >Decred Relative BTC Realised Cap and MVRV ratio</nuxt-link
-          >
-        </li>
-        <li>
-          <nuxt-link to="/charts/decred-market-realised-gradient-oscillator"
-            >Market-Realised Gradient Oscillator</nuxt-link
-          >
-        </li>
-        <li>
-          <nuxt-link to="/charts/decred-unrealised-profit-and-loss"
-            >Unrealised Profit and Loss</nuxt-link
-          >
-        </li>
-      </ul>
-    </Section>
-
-    <Section>
       <div>
         <h2 class="c-title">Snapshots</h2>
         <span class="c-subtitle ml-2">
@@ -107,21 +74,33 @@
         <el-col lg=""
       </el-row> -->
       <div class="c-chart-cards mt-30">
-        <ChartCard :colors="['green', 'blue']" icon="pie">
-          Decred Mayer Multiple Bands
-        </ChartCard>
-        <ChartCard :colors="['red', 'purple']" icon="bar">
-          Decred MVRV Ration Valuation
-        </ChartCard>
-        <ChartCard :colors="['purple', 'yellow']" icon="pie"
-          >Stakholders Commitments
-        </ChartCard>
-        <ChartCard :colors="['green', 'purple']" icon="bar">
-          Decred NVT and RVT Ratio
-        </ChartCard>
-        <ChartCard :colors="['green', 'blue']" icon="pie">
-          142-day Ticket Sum
-        </ChartCard>
+        <nuxt-link to="/charts/decred-mayer-multiple-bands">
+          <ChartCard :colors="['green', 'blue']" icon="pie">
+            Decred Mayer Multiple Bands
+          </ChartCard>
+        </nuxt-link>
+        <nuxt-link to="/charts/decred-realised-cap-and-mvrv-ratio">
+          <ChartCard :colors="['red', 'purple']" icon="bar">
+            Decred MVRV Ration Valuation
+          </ChartCard>
+        </nuxt-link>
+        <nuxt-link
+          to="/charts/decred-relative-bitcoin-realised-cap-and-mvrv-ratio"
+        >
+          <ChartCard :colors="['purple', 'yellow']" icon="pie"
+            >Relative BTC Realised Cap and MVRV ratio
+          </ChartCard>
+        </nuxt-link>
+        <nuxt-link to="/charts/decred-market-realised-gradient-oscillator">
+          <ChartCard :colors="['green', 'purple']" icon="bar">
+            Market-Realised Gradient Oscillator
+          </ChartCard>
+        </nuxt-link>
+        <nuxt-link to="/charts/decred-unrealised-profit-and-loss">
+          <ChartCard :colors="['green', 'blue']" icon="pie">
+            Unrealised PnL
+          </ChartCard>
+        </nuxt-link>
       </div>
 
       <div class="c-chart__wrapper mt-5 py-5 px-5">
@@ -487,6 +466,13 @@ export default Vue.extend({
       &:not(:last-child) {
         margin-right: 16px;
       }
+    }
+
+    a,
+    a:hover,
+    a:active,
+    a:visited {
+      text-decoration: none;
     }
   }
 
