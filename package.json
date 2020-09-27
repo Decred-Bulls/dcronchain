@@ -18,6 +18,7 @@
     "test:server:watch": "npm run test:server -- --watch"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/style-resources": "^1.0.0",
     "cross-env": "^7.0.2",
