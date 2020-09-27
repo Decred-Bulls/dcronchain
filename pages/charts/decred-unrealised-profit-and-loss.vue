@@ -18,11 +18,9 @@
           <h1 class="c-chart__title">
             Decred Unrealised Profit and Loss
           </h1>
-          <div class="c-chart__subtitle">
+          <!-- <div class="c-chart__subtitle">
             {{ lastUpdate | formatDate }}
-            <!-- - Mayer Multiple = 0.9 / DCR Price =
-            $100 -->
-          </div>
+          </div> -->
           <div class="c-chart__last-update">
             Updated {{ lastUpdate | formatDate }}
           </div>
@@ -57,7 +55,7 @@
             @click="onChangeChartType('142DAY')"
             >142-day</Button
           > -->
-          <Button class="ml-3">Share</Button>
+          <!-- <Button class="ml-3">Share</Button> -->
         </div>
       </div>
     </div>
@@ -206,10 +204,13 @@ export default Vue.extend({
   methods: {
     async initChart() {
       const chartUrl =
-        'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/unrealisedpnl_oscillator_usd/unrealisedpnl_oscillator_usd_light.json'
+        'https://raw.githubusercontent.com/dcronchain/data/master/data/unrealisedpnl_oscillator_usd.json'
 
-      const response = await fetch(chartUrl)
-      this.chartData = await response.json()
+      try {
+        this.chartData = await this.$axios.$get(chartUrl)
+      } catch (err) {
+        console.error(err)
+      }
 
       if (this.chartData) {
         this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
