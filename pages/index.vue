@@ -411,18 +411,17 @@ export default Vue.extend({
 
   methods: {
     //
-    normalizeFeaturedValue(value: number, origScale = 100, newScale = 1) {
-      const normalized = (value / origScale) * newScale
-      if (normalized < 0.25) {
+    normalizeFeaturedValue(value: number, origScale = 200, newScale = 1) {
+      if (value < -50) {
         return -2
       }
-      if (normalized < 0.45) {
+      if (value < 0) {
         return -1
       }
-      // if (normalized < 0.55) {
+      // if (value < 0.55) {
       //   return 0
       // }
-      if (normalized < 0.75) {
+      if (value < 50) {
         return 1
       }
       return 2
