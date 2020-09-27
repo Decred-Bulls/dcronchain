@@ -41,7 +41,7 @@
         </span>
       </div>
 
-      <el-row :gutter="20" class="mt-20">
+      <el-row v-if="featuredInsights" :gutter="20" class="mt-20">
         <el-col :span="8">
           <GaugeCard icon="safe" :value="featuredTreasuryGrowth.scale">
             <template v-slot:header> Treasury Growth </template>
@@ -141,14 +141,6 @@
             element-loading-background="transparent"
             class="m--flex justify-center"
           >
-            <!--  -->
-            <!-- <img src="@/assets/images/chart-mayer-sample.png" width="100%" /> -->
-            <!-- <div
-              v-loading="isChartLoading"
-              element-loading-background="transparent"
-              class="m--flex justify-center"
-              style="position: relative;"
-            ></div> -->
             <client-only>
               <Plotly
                 v-if="!isChartLoading && chartData"
@@ -173,16 +165,8 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" class="mt-5">
-          <el-col :span="8">
-            <MonetaryCard
-              title="200-Day Moving Average"
-              :value="featuredChart200DMA.currentValue | roundTo2DP"
-              :change="featuredChart200DMA.pctChange | roundTo2DP"
-              changeLabel="Change (7d)"
-            />
-          </el-col>
-          <el-col :span="8">
+        <el-row v-if="featuredChartInsights" :gutter="20" class="mt-5">
+          <el-col :span="6">
             <MonetaryCard
               title="Mayer Multiple"
               :value="featuredChartMayerMultiple.currentValue | roundTo2DP"
@@ -190,11 +174,19 @@
               changeLabel="Change (7d)"
             />
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <MonetaryCard
               title="Price (USD)"
               :value="featuredChartPriceUSD.currentValue | roundTo2DP"
               :change="featuredChartPriceUSD.pctChange | roundTo2DP"
+              changeLabel="Change (7d)"
+            />
+          </el-col>
+          <el-col :span="6">
+            <MonetaryCard
+              title="200-Day MA (USD)"
+              :value="featuredChart200DMA.currentValue | roundTo2DP"
+              :change="featuredChart200DMA.pctChange | roundTo2DP"
               changeLabel="Change (7d)"
             />
           </el-col>
@@ -219,68 +211,13 @@
           </span>
         </div>
 
-        <TableInsights :data="tableInsightsSorted" class="mt-5" />
+        <TableInsights
+          v-if="tableInsightsSorted"
+          :data="tableInsightsSorted"
+          class="mt-5"
+        />
 
-        <TableMetrics :data="tableMetrics" class="mt-5" />
-        <!-- <table class="c-table c-table--style-2 mt-5">
-          <thead>
-            <tr>
-              <th>Data Name</th>
-              <th>Current</th>
-              <th>Yesterday</th>
-              <th>Week (7d)</th>
-              <th>28-day MA</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in tableMetrics.data" :key="`tr-${row[0]}`">
-              <td>{{ row.name }}</td>
-              <td>{{ row.today | roundTo2DP }}</td>
-              <td>{{ row.yesterday | roundTo2DP }}</td>
-              <td>{{ row.past_week | roundTo2DP }}</td>
-              <td>{{ row['28dayMA'] | roundTo2DP }}</td>
-            </tr>
-          </tbody>
-        </table> -->
-
-        <!-- <table class="c-table c-table--style-2 mt-5">
-          <thead>
-            <tr>
-              <th>Ratio Name</th>
-              <th>Current Ratio</th>
-              <th>Previous Ratio (30d)</th>
-              <th>Current Signal</th>
-              <th>Previous Signal (30d)</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>MVRV</td>
-              <td>0.27</td>
-              <td>0.57</td>
-              <td>Undervalued</td>
-              <td>Undervalued</td>
-              <td><nuxt-link to="/">See details</nuxt-link></td>
-            </tr>
-            <tr>
-              <td>MVRV</td>
-              <td>0.27</td>
-              <td>0.57</td>
-              <td>Undervalued</td>
-              <td>Undervalued</td>
-              <td><nuxt-link to="/">See details</nuxt-link></td>
-            </tr>
-            <tr>
-              <td>MVRV</td>
-              <td>0.27</td>
-              <td>0.57</td>
-              <td>Undervalued</td>
-              <td>Undervalued</td>
-              <td><nuxt-link to="/">See details</nuxt-link></td>
-            </tr>
-          </tbody>
-        </table> -->
+        <TableMetrics v-if="tableMetrics" :data="tableMetrics" class="mt-5" />
       </div>
     </Section>
   </div>
@@ -299,11 +236,6 @@ import TableInsights from '~/components/TableInsights/index.vue'
 import TableMetrics from '~/components/TableMetrics/index.vue'
 import Tag from '~/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
-
-const featuredInsightsSample = require('@/data/homepage-featured-insights.json')
-const featuredChartInsightsSample = require('@/data/homepage-featured-chart-insights.json')
-const tableInsightsSample = require('@/data/homepage-insights-sample.json')
-const tableMetricsSample = require('@/data/homepage-metrics-sample.json')
 
 export default Vue.extend({
   components: {
@@ -324,36 +256,22 @@ export default Vue.extend({
       //
       isChartLoading: true,
       chartData: null as Chart | null,
-      featuredInsights: featuredInsightsSample,
-      featuredChartInsights: featuredChartInsightsSample,
-      tableMetrics: tableMetricsSample,
-      tableInsights: tableInsightsSample,
+      featuredInsights: null as any,
+      featuredChartInsights: null as any,
+      tableInsights: null as any,
+      tableMetrics: null as any,
     }
   },
 
   async mounted() {
-    try {
-      const response = await fetch(
-        'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
-      )
-      this.chartData = await response.json()
-
-      if (this.chartData) {
-        this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
-          return {
-            ...d,
-            key: createKey(d.name, idx),
-            show: true,
-            showToggle: d.showlegend,
-            showlegend: false,
-          }
-        })
-      }
-    } catch (err) {
-      console.error(err)
-    }
-
-    this.isChartLoading = false
+    await Promise.all([
+      //
+      this.fetchMayerMultipleData(),
+      this.fetchFeaturedChartInsightsData(),
+      this.fetchFeaturedInsightsData(),
+      this.fetchTableInsights(),
+      this.fetchTableMetrics(),
+    ])
   },
 
   computed: {
@@ -432,6 +350,10 @@ export default Vue.extend({
       }
     },
     tableInsightsSorted(): any {
+      if (!this.tableInsights) {
+        return null
+      }
+
       return {
         ...this.tableInsights,
         data: this.tableInsights.data.sort((a: any, b: any) =>
@@ -443,6 +365,68 @@ export default Vue.extend({
 
   methods: {
     //
+
+    async fetchMayerMultipleData() {
+      try {
+        this.chartData = await this.$axios.$get(
+          'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
+        )
+
+        if (this.chartData) {
+          this.chartData.data = this.chartData.data.map(
+            (d: any, idx: number) => {
+              return {
+                ...d,
+                key: createKey(d.name, idx),
+                show: true,
+                showToggle: d.showlegend,
+                showlegend: false,
+              }
+            }
+          )
+        }
+      } catch (err) {
+        console.error(err)
+      }
+
+      this.isChartLoading = false
+    },
+    async fetchFeaturedChartInsightsData() {
+      try {
+        this.featuredChartInsights = await this.$axios.$get(
+          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_featured_chart_insights.json'
+        )
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async fetchFeaturedInsightsData() {
+      try {
+        this.featuredInsights = await this.$axios.$get(
+          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_insights.json'
+        )
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async fetchTableInsights() {
+      try {
+        this.tableInsights = await this.$axios.$get(
+          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_charts_table.json'
+        )
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async fetchTableMetrics() {
+      try {
+        this.tableMetrics = await this.$axios.$get(
+          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_metric_table.json'
+        )
+      } catch (err) {
+        console.error(err)
+      }
+    },
     normalizeFeaturedValue(value: number) {
       if (value < -50) {
         return -2
