@@ -82,6 +82,10 @@ export default Vue.extend({
   border-radius: 3px;
   padding: 4px 20px 8px;
 
+  @include media('<=sm') {
+    margin-bottom: 16px;
+  }
+
   .title {
     font-weight: 600;
     font-size: 20px;
