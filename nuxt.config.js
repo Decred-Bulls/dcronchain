@@ -54,6 +54,7 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/style-resources',
+    '@nuxtjs/axios',
     '@nuxtjs/dotenv',
   ],
   /*
