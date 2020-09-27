@@ -18,23 +18,38 @@
           </h1>
           <div class="c-chart__subtitle">
             {{ lastUpdate | formatDate }}
-            <!-- - Mayer Multiple = 0.9 / DCR Price =
-            $100 -->
+            MVRV Ratio = {{ lastMVRVRatio | roundTo2DP }}
           </div>
           <div class="c-chart__last-update">
             Updated {{ lastUpdate | formatDate }}
           </div>
         </div>
 
-        <!-- <div class="c-chart__indicator-wrapper">
-+          <div class="c-chart__indicator">
+        <div v-if="lastValueSignal" class="c-chart__indicator-wrapper">
+          <div class="c-chart__indicator">
             <div>
-              <div class="c-chart__signal">STRONG BUY - BULLISH</div>
-              <div class="c-chart__signal-value">MVRV Ratio = 0.50</div>
+              <div class="c-chart__signal">{{ lastValueSignal }}</div>
+              <div class="c-chart__signal-value">
+                MVRV Ratio = {{ lastMVRVRatio | roundTo2DP }}
+              </div>
             </div>
-            <SignalIcon type="up" class="ml-4" />
+            <SignalIcon
+              v-if="lastValueSignal.includes('BUY')"
+              type="up"
+              class="ml-4"
+            />
+            <SignalIcon
+              v-if="lastValueSignal.includes('SELL')"
+              type="down"
+              class="ml-4"
+            />
+            <SignalIcon
+              v-if="lastValueSignal === 'NEUTRAL'"
+              type="neutral"
+              class="ml-4"
+            />
           </div>
-        </div> -->
+        </div>
       </div>
 
       <!-- Switches -->
@@ -55,7 +70,7 @@
             @click="onChangeChartType('VALUATION')"
             >Valuation</Button
           >
-          <Button class="ml-3">Share</Button>
+          <!-- <Button class="ml-3">Share</Button> -->
         </div>
       </div>
     </div>
@@ -166,6 +181,7 @@ import Tag from '@/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
 
 type ChartType = 'PRICING' | 'VALUATION'
+type SignalType = 'BUY' | 'STRONG BUY' | 'SELL' | 'STRONG SELL' | 'NEUTRAL'
 
 export default Vue.extend({
   layout: 'chart',
@@ -215,6 +231,34 @@ export default Vue.extend({
         height: 600,
       }
     },
+    lastMVRVRatio(): number | null {
+      if (this.chartData) {
+        const data = this.chartData.data.find(
+          (d) => d.name === 'Relative MVRV Ratio'
+        )
+
+        if (!data || !data.y) {
+          return null
+        }
+        const lastValue = data.y[data.y.length - 1]
+        return lastValue
+      }
+      return null
+    },
+    lastValueSignal(): SignalType | null {
+      const value = this.lastMVRVRatio
+      if (!value) {
+        return null
+      }
+
+      if (value <= 0.7) {
+        return 'BUY'
+      }
+      if (value <= 1.7) {
+        return 'NEUTRAL'
+      }
+      return 'SELL'
+    },
     lastUpdate(): Date {
       return new Date()
     },
@@ -224,11 +268,14 @@ export default Vue.extend({
     async initChart() {
       const chartUrl =
         this.chartType === 'VALUATION'
-          ? 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_valuation_btc/mvrv_valuation_btc_light.json'
-          : 'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mvrv_pricing_btc/mvrv_pricing_btc_light.json'
+          ? 'https://raw.githubusercontent.com/dcronchain/data/master/data/mvrv_valuation_btc.json'
+          : 'https://raw.githubusercontent.com/dcronchain/data/master/data/mvrv_pricing_btc.json'
 
-      const response = await fetch(chartUrl)
-      this.chartData = await response.json()
+      try {
+        this.chartData = await this.$axios.$get(chartUrl)
+      } catch (err) {
+        console.error(err)
+      }
 
       if (this.chartData) {
         this.chartData.data = this.chartData.data.map((d: any, idx: number) => {
