@@ -61,5 +61,5 @@ Vue.filter('formatPrice', function (value: string | number) {
 
 Vue.filter('formatPct', function (value: string | number) {
   const pct = Number(value) * 100
-  return `${pct.toFixed(2)}%`
+  return `${pct > 0 ? '+' : ''}${pct.toFixed(2)}%`
 })

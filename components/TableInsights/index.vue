@@ -3,7 +3,7 @@
     <table v-if="data" class="c-table c-table--style-1">
       <thead>
         <tr>
-          <th>Ratio Name</th>
+          <th>Metric</th>
           <th>Today</th>
           <th>Yesterday</th>
           <th>Week (7d)</th>

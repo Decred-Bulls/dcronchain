@@ -13,11 +13,11 @@
     <div class="indicator-wrapper">
       <!--  -->
       <div class="labels">
-        <label>Strong Sell</label>
-        <label>Sell</label>
+        <label> {{ labels[0] }} </label>
+        <label> {{ labels[1] }} </label>
         <label>&nbsp;</label>
-        <label>Buy</label>
-        <label>Strong Buy</label>
+        <label> {{ labels[2] }} </label>
+        <label> {{ labels[3] }} </label>
       </div>
       <div class="indicator">
         <div class="icon">
@@ -46,6 +46,8 @@ import IconSafe from './safe.svg?inline'
 type IconType = 'cart' | 'hand' | 'safe'
 type ValueType = -2 | -1 | 0 | 1 | 2
 
+const defaultLabels = ['Large Loss', 'Loss', 'Gain', 'Large Gain']
+
 export default Vue.extend({
   //
   components: {
@@ -60,6 +62,11 @@ export default Vue.extend({
       required: false,
       default: () => 'hand',
     } as PropOptions<IconType>,
+    labels: {
+      type: Array,
+      required: false,
+      default: () => defaultLabels,
+    },
     value: {
       type: Number,
       required: false,
@@ -101,7 +108,7 @@ export default Vue.extend({
     color: #091440;
     padding: 0 12px;
     margin-top: 5px;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
   }
 
   .text {

@@ -201,7 +201,7 @@ export default Vue.extend({
 
       return {
         ...((this.chartData as unknown) as Chart).layout,
-        height: 600,
+        height: 800,
       }
     },
     lastUpdate(): Date {

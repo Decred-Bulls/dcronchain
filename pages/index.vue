@@ -2,21 +2,25 @@
   <div class="p-homepage">
     <Section>
       <div>
-        <h2 class="c-title mr-2">Snapshots</h2>
+        <h2 class="c-title mr-2">Market Insights</h2>
         <span class="c-subtitle">
-          Discover Decred Economics
+          Decred Economic Performance
         </span>
       </div>
 
       <el-row v-if="featuredInsights" :gutter="20" class="mt-20">
         <el-col :lg="8" :md="8" :sm="24">
-          <GaugeCard icon="safe" :value="featuredTreasuryGrowth.scale">
-            <template v-slot:header> Treasury Growth </template>
+          <GaugeCard
+            icon="safe"
+            :labels="['Overspend', 'Spend', 'Growth', 'Strong Growth']"
+            :value="featuredTreasuryGrowth.scale"
+          >
+            <template v-slot:header> Monthly Treasury Growth </template>
             <template v-slot:content>
               <strong>
                 {{ featuredTreasuryGrowth.pctChange | formatPct }}
               </strong>
-              DCR THAN LAST MONTH
+              DCR From Last Month
             </template>
             <template v-slot:text>
               Current treasury:
@@ -27,10 +31,10 @@
         </el-col>
         <el-col :lg="8" :md="8" :sm="24">
           <GaugeCard icon="hand" :value="featuredDecredPower.scale">
-            <template v-slot:header> Decred Power </template>
+            <template v-slot:header> Decred Purchasing Power </template>
             <template v-slot:content>
               <strong>{{ featuredDecredPower.pctChange | formatPct }}</strong>
-              DCR THAN LAST MONTH
+              DCR From Last Month
             </template>
             <template v-slot:text>
               Current DCR price:
@@ -43,7 +47,7 @@
             <template v-slot:header> Realised Cap (USD) </template>
             <template v-slot:content>
               <strong> {{ featuredRealisedCap.pctChange | formatPct }} </strong>
-              USD THAN LAST MONTH
+              USD From Last Month
             </template>
             <template v-slot:text>
               Today's Realised Cap (USD):
@@ -58,7 +62,7 @@
       <div>
         <h2 class="c-title mr-2">Analyses &amp; Signals</h2>
         <span class="c-subtitle">
-          Visualize the power of Decred
+          Decred On-chain Performance
         </span>
       </div>
 
@@ -81,7 +85,7 @@
         </nuxt-link>
         <nuxt-link to="/charts/decred-realised-cap-and-mvrv-ratio">
           <ChartCard :colors="['red', 'purple']" icon="bar">
-            Decred MVRV Ration Valuation
+            Decred MVRV Ratio Valuation
           </ChartCard>
         </nuxt-link>
         <nuxt-link
@@ -189,9 +193,9 @@
     <Section color="alt-2">
       <div class="c-section__content">
         <div>
-          <h2 class="c-title mr-2">Expert data &amp; insights</h2>
+          <h2 class="c-title mr-2">Snapshots</h2>
           <span class="c-subtitle">
-            Get the evolution of Decred economics
+            Decred Metrics Dashboard
           </span>
         </div>
 
