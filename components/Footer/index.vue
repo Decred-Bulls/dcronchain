@@ -3,18 +3,20 @@
     <div class="c-footer__content">
       <div class="c-footer__row">
         <div class="c-footer__links2">
-          <a href="#">Decred.org</a>
-          <a href="#">Docs</a>
-          <a href="#">Wallet</a>
-          <a href="#">Community</a>
-          <a href="#">Become a contributor</a>
+          <a href="https://decred.org/">Decred.org</a>
+          <a href="https://docs.decred.org/">Docs</a>
+          <a href="https://decred.org/wallets/">Wallet</a>
+          <a href="https://decred.org/community/">Community</a>
+          <a href="https://docs.decred.org/contributing/overview/"
+            >Become a contributor</a
+          >
         </div>
 
         <div class="c-footer__social-links">
-          <IconDiscord />
-          <IconMatrix />
-          <IconMedium />
-          <IconTwitter />
+          <a href="https://discordapp.com/invite/GJ2GXfz"><IconDiscord /></a>
+          <a href="https://decred.org/matrix"><IconMatrix /></a>
+          <a href="https://medium.com/decred"><IconMedium /></a>
+          <a href="https://twitter.com/decredproject"><IconTwitter /></a>
         </div>
       </div>
 
@@ -177,7 +179,7 @@ export default Vue.extend({
       }
     }
 
-    & > svg {
+    & svg {
       width: 22px;
       height: 22px;
       margin-right: 12px;
