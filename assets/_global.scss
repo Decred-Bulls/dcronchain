@@ -181,7 +181,7 @@ $spacing-sizes: (
 
   &__toggles-right {
     display: flex;
-    // justify-items: flex-end;
+    align-items: flex-end;
     // flex-grow: 1;
     margin-left: auto;
 
