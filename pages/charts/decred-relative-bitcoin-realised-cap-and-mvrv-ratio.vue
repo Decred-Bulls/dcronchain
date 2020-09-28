@@ -1,8 +1,21 @@
 <template>
   <div>
     <div class="c-chart__navigation-buttons">
-      <Button prependIcon="arrow-left">Previous chart</Button>
-      <Button appendIcon="arrow-right" class="ml-auto">Next chart</Button>
+      <Button
+        prependIcon="arrow-left"
+        @click="$router.push('/charts/decred-realised-cap-and-mvrv-ratio')"
+      >
+        Previous chart
+      </Button>
+      <Button
+        appendIcon="arrow-right"
+        class="ml-auto"
+        @click="
+          $router.push('/charts/decred-market-realised-gradient-oscillator')
+        "
+      >
+        Next chart
+      </Button>
     </div>
 
     <div class="mx-40 mt-50">
