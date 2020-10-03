@@ -291,8 +291,6 @@ export default Vue.extend({
       fetchTableMetrics($axios),
     ])
 
-    console.log(JSON.stringify(data))
-
     return {
       featuredChartInsights:
         data[0].status === 'fulfilled' ? data[0].value : null,
