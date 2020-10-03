@@ -3,6 +3,7 @@ import 'reflect-metadata'
 import express, { Request, Response, NextFunction } from 'express'
 import proxy from 'express-http-proxy'
 const consola = require('consola')
+const cache = require('route-cache')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
@@ -45,7 +46,11 @@ async function start() {
     app.use(forceSsl)
   }
 
-  app.use('/api/proxy/', proxy('https://raw.githubusercontent.com'))
+  app.use(
+    '/api/proxy/',
+    cache.cacheSeconds(600),
+    proxy('https://raw.githubusercontent.com')
+  )
 
   // Setup routes
   // app.use('/api', routes)
