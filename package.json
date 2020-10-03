@@ -27,6 +27,7 @@
     "express-http-proxy": "^1.6.2",
     "nuxt": "^2.14.1",
     "reflect-metadata": "^0.1.13",
+    "route-cache": "^0.4.5",
     "typedi": "^0.8.0",
     "vue-plotly": "^1.1.0",
     "vue-svg-loader": "^0.16.0"
