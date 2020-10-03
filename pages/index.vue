@@ -213,6 +213,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { createKey } from '@/utils'
 import Button from '~/components/Button/index.vue'
 import ChartCard from '~/components/ChartCard/index.vue'
@@ -225,6 +226,43 @@ import TableInsights from '~/components/TableInsights/index.vue'
 import TableMetrics from '~/components/TableMetrics/index.vue'
 import Tag from '~/components/Tag.vue'
 import { Plotly } from 'vue-plotly'
+
+async function fetchFeaturedChartInsightsData($axios: NuxtAxiosInstance) {
+  try {
+    return await $axios.$get(
+      '/api/proxy/dcronchain/data/master/data/homepage_featured_chart_insights.json'
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}
+async function fetchFeaturedInsightsData($axios: NuxtAxiosInstance) {
+  try {
+    return await $axios.$get(
+      '/api/proxy/dcronchain/data/master/data/homepage_insights.json'
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}
+async function fetchTableInsights($axios: NuxtAxiosInstance) {
+  try {
+    return await $axios.$get(
+      '/api/proxy/dcronchain/data/master/data/homepage_charts_table.json'
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}
+async function fetchTableMetrics($axios: NuxtAxiosInstance) {
+  try {
+    return await $axios.$get(
+      '/api/proxy/dcronchain/data/master/data/homepage_metric_table.json'
+    )
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 export default Vue.extend({
   components: {
@@ -241,6 +279,24 @@ export default Vue.extend({
     Tag,
   },
 
+  async asyncData({ $axios }) {
+    const data: any = await Promise.allSettled([
+      //
+      fetchFeaturedChartInsightsData($axios),
+      fetchFeaturedInsightsData($axios),
+      fetchTableInsights($axios),
+      fetchTableMetrics($axios),
+    ])
+
+    return {
+      featuredChartInsights:
+        data[0].status === 'fulfilled' ? data[0].value : null,
+      featuredInsights: data[1].status === 'fulfilled' ? data[0].value : null,
+      tableInsights: data[2].status === 'fulfilled' ? data[0].value : null,
+      tableMetrics: data[3].status === 'fulfilled' ? data[0].value : null,
+    }
+  },
+
   data() {
     return {
       //
@@ -254,14 +310,15 @@ export default Vue.extend({
   },
 
   async mounted() {
-    await Promise.all([
-      //
-      this.fetchMayerMultipleData(),
-      this.fetchFeaturedChartInsightsData(),
-      this.fetchFeaturedInsightsData(),
-      this.fetchTableInsights(),
-      this.fetchTableMetrics(),
-    ])
+    this.fetchMayerMultipleData()
+    // await Promise.all([
+    //   //
+    //   this.fetchMayerMultipleData(),
+    //   this.fetchFeaturedChartInsightsData(),
+    //   this.fetchFeaturedInsightsData(),
+    //   this.fetchTableInsights(),
+    //   this.fetchTableMetrics(),
+    // ])
   },
 
   computed: {
@@ -381,42 +438,42 @@ export default Vue.extend({
 
       this.isChartLoading = false
     },
-    async fetchFeaturedChartInsightsData() {
-      try {
-        this.featuredChartInsights = await this.$axios.$get(
-          '/api/proxy/dcronchain/data/master/data/homepage_featured_chart_insights.json'
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    },
-    async fetchFeaturedInsightsData() {
-      try {
-        this.featuredInsights = await this.$axios.$get(
-          '/api/proxy/dcronchain/data/master/data/homepage_insights.json'
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    },
-    async fetchTableInsights() {
-      try {
-        this.tableInsights = await this.$axios.$get(
-          '/api/proxy/dcronchain/data/master/data/homepage_charts_table.json'
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    },
-    async fetchTableMetrics() {
-      try {
-        this.tableMetrics = await this.$axios.$get(
-          '/api/proxy/dcronchain/data/master/data/homepage_metric_table.json'
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    },
+    // async fetchFeaturedChartInsightsData() {
+    //   try {
+    //     this.featuredChartInsights = await this.$axios.$get(
+    //       '/api/proxy/dcronchain/data/master/data/homepage_featured_chart_insights.json'
+    //     )
+    //   } catch (err) {
+    //     console.error(err)
+    //   }
+    // },
+    // async fetchFeaturedInsightsData() {
+    //   try {
+    //     this.featuredInsights = await this.$axios.$get(
+    //       '/api/proxy/dcronchain/data/master/data/homepage_insights.json'
+    //     )
+    //   } catch (err) {
+    //     console.error(err)
+    //   }
+    // },
+    // async fetchTableInsights() {
+    //   try {
+    //     this.tableInsights = await this.$axios.$get(
+    //       '/api/proxy/dcronchain/data/master/data/homepage_charts_table.json'
+    //     )
+    //   } catch (err) {
+    //     console.error(err)
+    //   }
+    // },
+    // async fetchTableMetrics() {
+    //   try {
+    //     this.tableMetrics = await this.$axios.$get(
+    //       '/api/proxy/dcronchain/data/master/data/homepage_metric_table.json'
+    //     )
+    //   } catch (err) {
+    //     console.error(err)
+    //   }
+    // },
     normalizeFeaturedValue(value: number) {
       if (value < -50) {
         return -2
