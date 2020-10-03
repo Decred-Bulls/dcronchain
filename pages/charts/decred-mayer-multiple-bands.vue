@@ -166,7 +166,7 @@ export default Vue.extend({
   async mounted() {
     try {
       this.chartData = await this.$axios.$get(
-        'https://raw.githubusercontent.com/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
+        '/api/proxy/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
       )
     } catch (err) {
       console.error(err)

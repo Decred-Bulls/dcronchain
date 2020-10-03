@@ -281,8 +281,8 @@ export default Vue.extend({
     async initChart() {
       const chartUrl =
         this.chartType === 'VALUATION'
-          ? 'https://raw.githubusercontent.com/dcronchain/data/master/data/mvrv_valuation_btc.json'
-          : 'https://raw.githubusercontent.com/dcronchain/data/master/data/mvrv_pricing_btc.json'
+          ? '/api/proxy/dcronchain/data/master/data/mvrv_valuation_btc.json'
+          : '/api/proxy/dcronchain/data/master/data/mvrv_pricing_btc.json'
 
       try {
         this.chartData = await this.$axios.$get(chartUrl)

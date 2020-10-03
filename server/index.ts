@@ -1,6 +1,7 @@
 // Required for 'typedi' module
 import 'reflect-metadata'
 import express, { Request, Response, NextFunction } from 'express'
+import proxy from 'express-http-proxy'
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
@@ -43,6 +44,8 @@ async function start() {
   if (process.env.NODE_ENV === 'production') {
     app.use(forceSsl)
   }
+
+  app.use('/api/proxy/', proxy('https://raw.githubusercontent.com'))
 
   // Setup routes
   // app.use('/api', routes)

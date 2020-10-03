@@ -217,7 +217,7 @@ export default Vue.extend({
   methods: {
     async initChart() {
       const chartUrl =
-        'https://raw.githubusercontent.com/dcronchain/data/master/data/unrealisedpnl_oscillator_usd.json'
+        '/api/proxy/dcronchain/data/master/data/unrealisedpnl_oscillator_usd.json'
 
       try {
         this.chartData = await this.$axios.$get(chartUrl)

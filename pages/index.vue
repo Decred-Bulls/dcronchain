@@ -359,7 +359,7 @@ export default Vue.extend({
     async fetchMayerMultipleData() {
       try {
         this.chartData = await this.$axios.$get(
-          'https://raw.githubusercontent.com/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
+          '/api/proxy/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
         )
 
         if (this.chartData) {
@@ -384,7 +384,7 @@ export default Vue.extend({
     async fetchFeaturedChartInsightsData() {
       try {
         this.featuredChartInsights = await this.$axios.$get(
-          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_featured_chart_insights.json'
+          '/api/proxy/dcronchain/data/master/data/homepage_featured_chart_insights.json'
         )
       } catch (err) {
         console.error(err)
@@ -393,7 +393,7 @@ export default Vue.extend({
     async fetchFeaturedInsightsData() {
       try {
         this.featuredInsights = await this.$axios.$get(
-          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_insights.json'
+          '/api/proxy/dcronchain/data/master/data/homepage_insights.json'
         )
       } catch (err) {
         console.error(err)
@@ -402,7 +402,7 @@ export default Vue.extend({
     async fetchTableInsights() {
       try {
         this.tableInsights = await this.$axios.$get(
-          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_charts_table.json'
+          '/api/proxy/dcronchain/data/master/data/homepage_charts_table.json'
         )
       } catch (err) {
         console.error(err)
@@ -411,7 +411,7 @@ export default Vue.extend({
     async fetchTableMetrics() {
       try {
         this.tableMetrics = await this.$axios.$get(
-          'https://raw.githubusercontent.com/dcronchain/data/master/data/homepage_metric_table.json'
+          '/api/proxy/dcronchain/data/master/data/homepage_metric_table.json'
         )
       } catch (err) {
         console.error(err)

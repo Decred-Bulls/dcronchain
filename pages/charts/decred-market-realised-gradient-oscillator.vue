@@ -228,8 +228,8 @@ export default Vue.extend({
     async initChart() {
       const chartUrl =
         this.chartType === '28DAY'
-          ? 'https://raw.githubusercontent.com/dcronchain/data/master/data/mrktrealgrad_28_day_oscillator_usd.json'
-          : 'https://raw.githubusercontent.com/dcronchain/data/master/data/mrktrealgrad_142_day_oscillator_usd.json'
+          ? '/api/proxy/dcronchain/data/master/data/mrktrealgrad_28_day_oscillator_usd.json'
+          : '/api/proxy/dcronchain/data/master/data/mrktrealgrad_142_day_oscillator_usd.json'
 
       try {
         this.chartData = await this.$axios.$get(chartUrl)
