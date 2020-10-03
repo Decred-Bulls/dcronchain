@@ -1,3 +1,6 @@
+// We have to do this here, so that `npm run build` works correctly
+require('dotenv').config()
+
 module.exports = {
   mode: 'spa',
   telemetry: false,
@@ -16,6 +19,9 @@ module.exports = {
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  },
+  env: {
+    DOMAIN: process.env.DOMAIN,
   },
   /*
    ** Customize the progress-bar color
@@ -43,7 +49,12 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/element-ui', '@/plugins/filters'],
+  plugins: [
+    //
+    '@/plugins/element-ui',
+    '@/plugins/filters',
+    '@/plugins/axios',
+  ],
   /*
    ** Nuxt.js dev-modules
    */
