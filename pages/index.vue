@@ -359,7 +359,7 @@ export default Vue.extend({
     async fetchMayerMultipleData() {
       try {
         this.chartData = await this.$axios.$get(
-          'https://raw.githubusercontent.com/checkmatey/checkonchain/master/hosted_charts/dcronchain/mayermultiple_pricing_usd/mayermultiple_pricing_usd_light.json'
+          'https://raw.githubusercontent.com/dcronchain/data/master/data/mayermultiple_pricing_usd.json'
         )
 
         if (this.chartData) {
