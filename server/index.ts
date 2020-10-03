@@ -48,7 +48,7 @@ async function start() {
 
   app.use(
     '/api/proxy/',
-    cache.cacheSeconds(600),
+    cache.cacheSeconds(3600),
     proxy('https://raw.githubusercontent.com')
   )
 
