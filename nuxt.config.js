@@ -2,7 +2,7 @@
 require('dotenv').config()
 
 module.exports = {
-  mode: 'spa',
+  mode: 'universal',
   telemetry: false,
   /*
    ** Headers of the page

@@ -225,7 +225,6 @@ import Section from '~/components/Section/index.vue'
 import TableInsights from '~/components/TableInsights/index.vue'
 import TableMetrics from '~/components/TableMetrics/index.vue'
 import Tag from '~/components/Tag.vue'
-import { Plotly } from 'vue-plotly'
 
 async function fetchFeaturedChartInsightsData($axios: NuxtAxiosInstance) {
   try {
@@ -234,6 +233,7 @@ async function fetchFeaturedChartInsightsData($axios: NuxtAxiosInstance) {
     )
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
 async function fetchFeaturedInsightsData($axios: NuxtAxiosInstance) {
@@ -243,6 +243,7 @@ async function fetchFeaturedInsightsData($axios: NuxtAxiosInstance) {
     )
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
 async function fetchTableInsights($axios: NuxtAxiosInstance) {
@@ -252,6 +253,7 @@ async function fetchTableInsights($axios: NuxtAxiosInstance) {
     )
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
 async function fetchTableMetrics($axios: NuxtAxiosInstance) {
@@ -261,6 +263,7 @@ async function fetchTableMetrics($axios: NuxtAxiosInstance) {
     )
   } catch (err) {
     console.error(err)
+    throw err
   }
 }
 
@@ -271,7 +274,7 @@ export default Vue.extend({
     GaugeCard,
     Logo,
     MonetaryCard,
-    Plotly,
+    Plotly: () => import('vue-plotly').then((m) => m.Plotly),
     SignalIcon,
     Section,
     TableInsights,
@@ -288,12 +291,14 @@ export default Vue.extend({
       fetchTableMetrics($axios),
     ])
 
+    console.log(JSON.stringify(data))
+
     return {
       featuredChartInsights:
         data[0].status === 'fulfilled' ? data[0].value : null,
-      featuredInsights: data[1].status === 'fulfilled' ? data[0].value : null,
-      tableInsights: data[2].status === 'fulfilled' ? data[0].value : null,
-      tableMetrics: data[3].status === 'fulfilled' ? data[0].value : null,
+      featuredInsights: data[1].status === 'fulfilled' ? data[1].value : null,
+      tableInsights: data[2].status === 'fulfilled' ? data[2].value : null,
+      tableMetrics: data[3].status === 'fulfilled' ? data[3].value : null,
     }
   },
 
@@ -302,10 +307,10 @@ export default Vue.extend({
       //
       isChartLoading: true,
       chartData: null as Chart | null,
-      featuredInsights: null as any,
-      featuredChartInsights: null as any,
-      tableInsights: null as any,
-      tableMetrics: null as any,
+      featuredInsights: undefined as any,
+      featuredChartInsights: undefined as any,
+      tableInsights: undefined as any,
+      tableMetrics: undefined as any,
     }
   },
 

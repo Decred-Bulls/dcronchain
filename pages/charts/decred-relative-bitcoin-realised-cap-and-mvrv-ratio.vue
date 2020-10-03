@@ -191,7 +191,6 @@ import ChartToggles from '@/components/ChartToggles/index.vue'
 import SignalIcon from '@/components/SignalIcon/index.vue'
 import Toggle from '@/components/Toggle.vue'
 import Tag from '@/components/Tag.vue'
-import { Plotly } from 'vue-plotly'
 
 type ChartType = 'PRICING' | 'VALUATION'
 type SignalType = 'BUY' | 'STRONG BUY' | 'SELL' | 'STRONG SELL' | 'NEUTRAL'
@@ -202,9 +201,7 @@ export default Vue.extend({
   components: {
     Button,
     ChartToggles,
-    // import { Plotly } from 'vue-plotly'
-    // Plotly: () => import('vue-plotly').then((mod) => mod.Plotly),
-    Plotly,
+    Plotly: () => import('vue-plotly').then((m) => m.Plotly),
     SignalIcon,
     Tag,
     Toggle,
