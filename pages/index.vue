@@ -12,7 +12,7 @@
         <el-col :lg="8" :md="8" :sm="24">
           <GaugeCard
             icon="safe"
-            :labels="['Overspend', 'Spend', 'Growth', 'Strong Growth']"
+            :labels="['Overspend', 'Spend', 'Gain', 'Growth']"
             :value="featuredTreasuryGrowth.scale"
           >
             <template v-slot:header> Monthly Treasury Growth </template>
