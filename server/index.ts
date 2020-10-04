@@ -48,7 +48,7 @@ async function start() {
 
   app.use(
     '/api/proxy/',
-    cache.cacheSeconds(86400), // 24 hours
+    cache.cacheSeconds(21600), // 6 hours
     proxy('https://raw.githubusercontent.com')
   )
 
